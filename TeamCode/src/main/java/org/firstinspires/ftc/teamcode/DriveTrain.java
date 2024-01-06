@@ -133,9 +133,13 @@ public class DriveTrain {
                 log("DriveTrain: Normal Speed:", normal_speed);
                 drive_normal();
             }
-        } else if (gamepad.dpad_left || gamepad.dpad_right || gamepad.dpad_down || gamepad.dpad_up) {
-            log("DriveTrain: Slow Speed:", slow_speed);
-            drive_slow();
+        } else if (gamepad.dpad_left) {
+            robot.sampleDrive.turn(Math.toRadians(90));
+        } else if (gamepad.dpad_right) {
+            robot.sampleDrive.turn(Math.toRadians(-90));
+        } else if (gamepad.dpad_down || gamepad.dpad_up) {
+            robot.sampleDrive.turn(Math.toRadians(180));
+            //drive_slow();
         } else {
             log("DriveTrain: StopDrive", 0.0);
             stopDrive();
