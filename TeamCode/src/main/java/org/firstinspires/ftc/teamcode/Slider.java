@@ -11,6 +11,7 @@ public class Slider extends EncoderMotorOps {
     static final private int pos_max = 7800;
     static final private int pos_min = 0;
     private int pos_middle = 3900;
+    private int pos_auton = 1000;
     private boolean verbose = false;
     private int motor_ticks = 1425;
 
@@ -21,6 +22,9 @@ public class Slider extends EncoderMotorOps {
         super(robot, robot.motorSlider, pos_min, pos_max, auto_power, false);
         this.robot = robot;
         this.gamepad = gamepad;
+    }
+    public void auton() {
+        autoOp(pos_auton);
     }
 
     public void operate() {
