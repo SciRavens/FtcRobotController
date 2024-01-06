@@ -12,8 +12,6 @@ public class RobotTeleop extends LinearOpMode {
     public Arm arm;
     public Claw claw;
 
-    public Hang hang;
-
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
@@ -22,7 +20,6 @@ public class RobotTeleop extends LinearOpMode {
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
         claw = new Claw(robot, gamepad2);
-        hang = new Hang(robot, gamepad2);
 
         waitForStart();
         while(opModeIsActive()) {
@@ -31,7 +28,6 @@ public class RobotTeleop extends LinearOpMode {
             slider.operate();
             arm.operate();
             claw.operate();
-            hang.operate();
         }
     }
 }

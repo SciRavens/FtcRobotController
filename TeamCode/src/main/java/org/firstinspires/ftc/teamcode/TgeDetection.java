@@ -1,55 +1,44 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class TgeDetection {
-    OpenCvCamera camera;
-    SplitAveragePipeline splitAveragePipeline;
-    int camW = 800;
-    int camH = 448;
+    private OpenCvCamera camera;
+    Scalar red = new Scalar(255, 0, 0);
+    Scalar blue = new Scalar(0, 0, 255);
+    Robot robot = null;
 
-    int zone = 1;
+    private TgeDetectorPipeline tgeDetectorPipeline;
 
-    public TgeDetection(WebcamName webcam){
-        camera = OpenCvCameraFactory.getInstance().createWebcam(webcam);
-        splitAveragePipeline = new SplitAveragePipeline();
+    public TgeDetection(Robot robot) {
+        this.robot = robot;
+        tgeDetectorPipeline = new TgeDetectorPipeline();
+        camera = OpenCvCameraFactory.getInstance().createWebcam(robot.webcam);
+        camera.setPipeline(tgeDetectorPipeline);
 
-        camera.setPipeline(splitAveragePipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                camera.startStreaming(camW, camH, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
-
             @Override
-            public void onError(int errorCode)
-            {
-
-            }
+            public void onError(int errorCode) {}
         });
     }
 
-    public void setAlliance(String alliance){
-        splitAveragePipeline.setAlliancePipe(alliance);
+    public int getZone()
+    {
+        return tgeDetectorPipeline.getTgeZone();
     }
-
-    public int elementDetection(Telemetry telemetry) {
-        zone = splitAveragePipeline.get_element_zone();
-        telemetry.addData("Element Zone", zone);
-        return zone;
-    }
-
-    public void toggleAverageZone(){
-        splitAveragePipeline.toggleAverageZonePipe();
-    }
-
-    public double getMaxDistance(){
-        return splitAveragePipeline.getMaxDistance();
+    public String getTgeColor()
+    {
+        return tgeDetectorPipeline.getTgeColor();
     }
 }
