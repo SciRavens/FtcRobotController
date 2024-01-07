@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp(name="SpikeDetection")
-@Disabled
+//@Disabled
 public class SpikeDetection extends OpMode {
 
     Scalar red = new Scalar(255, 0, 0);
@@ -48,6 +48,7 @@ public class SpikeDetection extends OpMode {
     @Override
     public void loop() {
         dashboardTelemetry.addData("Spike Zone", spikeDetectorPipeline.getSpikeZone());
+        dashboardTelemetry.addData("Spike ColorDist", spikeDetectorPipeline.colorDist);
         dashboardTelemetry.update();
     }
 

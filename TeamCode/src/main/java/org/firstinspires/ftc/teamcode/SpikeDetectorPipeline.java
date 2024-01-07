@@ -15,8 +15,8 @@ import java.util.Objects;
 public class SpikeDetectorPipeline extends OpenCvPipeline {
 
     Rect z1Rect = new Rect(20, 280, 150, 150);
-    Rect z2Rect = new Rect(220, 240, 150, 150);
-    Rect z3Rect = new Rect(420, 280, 150, 150);
+    Rect z2Rect = new Rect(125, 220, 150, 150);
+    Rect z3Rect = new Rect(480, 220, 150, 150);
 
     HashMap<Integer, Rect> zoneRects = new HashMap<Integer, Rect>() {{
         put(1, z1Rect);
@@ -30,8 +30,10 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
 
+    public double colorDist = 0.0;
+
     Scalar spikeColor;
-    int spikeZone = -1;
+    int spikeZone = 1;
 
     public SpikeDetectorPipeline(Scalar spikeColor) {
         super();
@@ -78,7 +80,11 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
         }
 
         spikeColor = blue;
-        spikeZone = bluemin + 1;
+        spikeZone = 1;
+        colorDist = blueDist[bluemin];
+        if (blueDist[bluemin] < 190) {
+            spikeZone = bluemin + 1;
+        }
         if (redDist[redmin] < blueDist[bluemin]) {
             spikeZone = redmin + 1;
             spikeColor = red;
