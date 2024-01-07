@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "SciRavens-Autonomous")
-public class RobotAutonomous extends LinearOpMode {
+@Autonomous(name = "Blue-Autonomous")
+public class BlueAutonomous extends LinearOpMode {
     public Robot robot;
     public SampleMecanumDrive drive;
     public Slider slider;
