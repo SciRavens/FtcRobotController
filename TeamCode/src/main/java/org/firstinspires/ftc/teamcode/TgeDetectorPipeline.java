@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class TgeDetectorPipeline extends OpenCvPipeline {
-    Rect z1Rect = new Rect(20, 280, 150, 150);
-    Rect z2Rect = new Rect(220, 240, 150, 150);
-    Rect z3Rect = new Rect(420, 280, 150, 150);
 
+    Rect z1Rect = new Rect(20, 280, 150, 150);
+    Rect z2Rect = new Rect(125, 220, 150, 150);
+    Rect z3Rect = new Rect(480, 220, 150, 150);
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
 
     String tgeColor = "blue";
-    int tgeZone = -1;
+    int tgeZone = 1;
 
     public TgeDetectorPipeline() {
         super();
@@ -62,7 +62,10 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         }
 
         tgeColor = "blue";
-        tgeZone = bluemin + 1;
+        tgeZone = 1;
+        if (blueDist[bluemin] < 190) {
+            tgeZone = bluemin + 1;
+        }
         if (redDist[redmin] < blueDist[bluemin]) {
             tgeZone = redmin + 1;
             tgeColor = "red";

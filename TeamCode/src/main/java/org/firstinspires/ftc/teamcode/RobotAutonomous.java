@@ -40,14 +40,21 @@ public class RobotAutonomous extends LinearOpMode {
         buildBlueZone2Trajectory();
         buildBlueZone3Trajectory();
 
-        // Detect the zone
-        zone = tge.getZone();
-
         waitForStart();
+
+        if(isStopRequested()) {
+            return;
+        }
+            // Detect the zone
+        for (int i = 0; i < 10; i++) {
+            zone = tge.getZone();
+            sleep(100);
+            telemetry.addData("Zone number:", zone);
+            telemetry.update();
+        }
+
         if(opModeIsActive()) {
-                //zone = tge.elementDetection(telemetry);
-                zone = 2;
-            }
+                //zone = 3;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
@@ -59,6 +66,7 @@ public class RobotAutonomous extends LinearOpMode {
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone3);;
                     break;
             }
+        }
 
     }
 
@@ -66,25 +74,24 @@ public class RobotAutonomous extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     claw.close_claw_right();
                     claw.close_claw_left();
                     sleep(500);
                 })
-                .forward(27)
-                .waitSeconds(2)
+                .waitSeconds(1)
+                .strafeLeft(12.5)
+                .forward(20)
                 .addTemporalMarker(() -> {
                     claw.open_claw_right();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
                 })
-                .waitSeconds(2)
+                .waitSeconds(1)
                 .turn(Math.toRadians(90))
-                .waitSeconds(2)
-                .forward(40)
-                .waitSeconds(2)
+                .waitSeconds(1)
+                .forward(27)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -93,9 +100,8 @@ public class RobotAutonomous extends LinearOpMode {
                     arm.arm_fold();
                     sleep(500);
                 })
-                .waitSeconds(2)
                 .back(4)
-                .strafeLeft(25)
+                .strafeLeft(19)
                 .forward(10)
                 .build();
     }
@@ -110,19 +116,20 @@ public class RobotAutonomous extends LinearOpMode {
                     claw.close_claw_left();
                     sleep(500);
                 })
+                .waitSeconds(1)
                 .forward(27)
-                .waitSeconds(2)
                 .addTemporalMarker(() -> {
                     claw.open_claw_right();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
+                    claw.close_claw_right();
+                    sleep(500);
                 })
-                .waitSeconds(2)
+                .waitSeconds(1)
                 .turn(Math.toRadians(90))
-                .waitSeconds(2)
-                .forward(40)
-                .waitSeconds(2)
+                .waitSeconds(1)
+                .forward(39)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -131,7 +138,6 @@ public class RobotAutonomous extends LinearOpMode {
                     arm.arm_fold();
                     sleep(500);
                 })
-                .waitSeconds(2)
                 .back(4)
                 .strafeLeft(25)
                 .forward(10)
@@ -148,19 +154,22 @@ public class RobotAutonomous extends LinearOpMode {
                     claw.close_claw_left();
                     sleep(500);
                 })
-                .forward(27)
-                .waitSeconds(2)
+                .waitSeconds(1)
+                .forward(26)
+                .turn(Math.toRadians(-55))
+                .forward(3)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     claw.open_claw_right();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
                 })
-                .waitSeconds(2)
-                .turn(Math.toRadians(90))
-                .waitSeconds(2)
-                .forward(40)
-                .waitSeconds(2)
+                .waitSeconds(1)
+                .turn(Math.toRadians(145))
+                .forward(21)
+                .strafeRight(8)
+                .forward(20)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -169,9 +178,8 @@ public class RobotAutonomous extends LinearOpMode {
                     arm.arm_fold();
                     sleep(500);
                 })
-                .waitSeconds(2)
                 .back(4)
-                .strafeLeft(25)
+                .strafeLeft(35)
                 .forward(10)
                 .build();
     }
