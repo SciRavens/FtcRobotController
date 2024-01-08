@@ -34,6 +34,10 @@ public class Robot {
     private AprilTagProcessor aprilTag;
     public WebcamName webcam;
     public SampleMecanumDrive sampleDrive;
+    public double claw_left_open = 1;
+    public double claw_right_open = 0.0;
+    public double claw_left_close = 0.75;
+    public double claw_right_close = 0.3;
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -48,8 +52,6 @@ public class Robot {
         servoDrone = hardwareMap.get(Servo.class, "drone");
         webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         sampleDrive = new SampleMecanumDrive(hardwareMap);
-
-        //servoArm.setPosition(0.2);
     }
 
 }

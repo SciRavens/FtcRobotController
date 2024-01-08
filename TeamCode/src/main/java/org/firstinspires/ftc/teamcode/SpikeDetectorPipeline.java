@@ -80,7 +80,7 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
         }
 
         spikeColor = blue;
-        spikeZone = 1;
+        spikeZone = 3;
         colorDist = blueDist[bluemin];
         if (blueDist[bluemin] < 190) {
             spikeZone = bluemin + 1;
@@ -88,6 +88,9 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
         if (redDist[redmin] < blueDist[bluemin]) {
             spikeZone = redmin + 1;
             spikeColor = red;
+        }
+        if (redDist[redmin] < 190) {
+            spikeZone = redmin + 1;
         }
 
         for (int z = 1; z <= 3; z++) {

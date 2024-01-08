@@ -62,13 +62,17 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         }
 
         tgeColor = "blue";
-        tgeZone = 1;
+        //tgeZone = 1;
+        tgeZone = 3;
         if (blueDist[bluemin] < 190) {
             tgeZone = bluemin + 1;
         }
         if (redDist[redmin] < blueDist[bluemin]) {
             tgeZone = redmin + 1;
             tgeColor = "red";
+        }
+        if (redDist[redmin] < 190) {
+            tgeZone = redmin + 1;
         }
         return frame;
     }
