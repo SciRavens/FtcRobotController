@@ -12,6 +12,7 @@ public class Arm {
     public Arm(Robot robot, Gamepad gamepad) {
         this.robot = robot;
         this.gamepad = gamepad;
+        arm_pixel();
     }
 
     public void arm_pixel()
