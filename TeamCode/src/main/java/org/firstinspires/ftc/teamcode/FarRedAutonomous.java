@@ -14,14 +14,13 @@ public class FarRedAutonomous extends LinearOpMode {
     public Slider slider;
     public Arm arm;
     public Claw left_claw, right_claw;
-
     public AprilTag tag;
     public TgeDetection tge;
     String curAlliance = "red";
     public int zone = 2;
-    TrajectorySequence trajRedZone1;
-    TrajectorySequence trajRedZone2;
-    TrajectorySequence trajRedZone3;
+    TrajectorySequence trajBlueZone1;
+    TrajectorySequence trajBlueZone2;
+    TrajectorySequence trajBlueZone3;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,17 +28,20 @@ public class FarRedAutonomous extends LinearOpMode {
         drive = robot.sampleDrive;
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
+
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
+
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
+
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot);
 
-        buildRedZone1Trajectory();
-        buildRedZone2Trajectory();
-        buildRedZone3Trajectory();
+
+        buildBlueZone1Trajectory();
+        buildBlueZone2Trajectory();
+        buildBlueZone3Trajectory();
 
         waitForStart();
-
         if(isStopRequested()) {
             return;
         }
@@ -52,45 +54,91 @@ public class FarRedAutonomous extends LinearOpMode {
         }
 
         if(opModeIsActive()) {
-            zone = 2;
+            zone = 3;
             switch(zone) {
                 case 1:
-                    robot.sampleDrive.followTrajectorySequence(trajRedZone1);;
+                    robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
                     break;
                 case 2:
-                    robot.sampleDrive.followTrajectorySequence(trajRedZone2);;
+                    robot.sampleDrive.followTrajectorySequence(trajBlueZone2);;
                     break;
                 case 3:
-                    robot.sampleDrive.followTrajectorySequence(trajRedZone3);;
+                    robot.sampleDrive.followTrajectorySequence(trajBlueZone3);;
                     break;
             }
         }
 
     }
-    // change the order of tghe functions as it is 3,2,1 instead of numercal order; God bless America
-    private void buildRedZone3Trajectory() {
+
+    private void buildBlueZone1Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajRedZone3 = drive.trajectorySequenceBuilder(startPose)
+        trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.close();
                     left_claw.close();
                     sleep(500);
-                    // sleep(5000);
                 })
                 .waitSeconds(1)
-                .strafeRight(12.5)
-                .forward(20)
+                .forward(22)
+                .turn(Math.toRadians(-50))
+                .forward(4)
                 .addTemporalMarker(() -> {
                     left_claw.open();
                     sleep(500);
+                })
+                .back(4)
+                .turn(Math.toRadians(50))
+                .waitSeconds(1)
+                .back(19)
+                .addTemporalMarker(() -> {
                     arm.arm_backdrop();
                     sleep(500);
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-90))
+                .waitSeconds(2)
+                .forward(70)
+                .strafeLeft(22)
+                .forward(19)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(500);
+                    right_claw.open();
+                    sleep(1000);
+                    sleep(500);
+                })
+                .back(4)
+                .strafeRight(21)
+                .forward(10)
+                .build();
+    }
+
+    private void buildBlueZone2Trajectory() {
+        Pose2d startPose = new Pose2d(0, 0, 0);
+        drive.setPoseEstimate(startPose);
+        trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
-                .forward(27.25)
+                .addTemporalMarker(() -> {
+                    right_claw.close();
+                    left_claw.close();
+                    sleep(500);
+                })
+                .waitSeconds(1)
+                .forward(27)
+                .addTemporalMarker(() -> {
+                    left_claw.open();
+                    sleep(500);
+                    arm.arm_backdrop();
+                    sleep(500);
+                    left_claw.close();
+                    sleep(500);
+                })
+                .waitSeconds(1)
+                .turn(Math.toRadians(-90))
+                .waitSeconds(1)
+                .forward(87)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -100,15 +148,16 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .back(4)
-                .strafeRight(19)
+                .strafeRight(25)
                 .forward(10)
                 .build();
+
     }
 
-    private void buildRedZone2Trajectory() {
+    private void buildBlueZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajRedZone2 = drive.trajectorySequenceBuilder(startPose)
+        trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.close();
@@ -116,47 +165,9 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .waitSeconds(1)
-                .forward(28)
-                .addTemporalMarker(() -> {
-                    left_claw.open();
-                    sleep(500);
-                    arm.arm_backdrop();
-                    sleep(500);
-                    left_claw.close();
-                    sleep(500);
-                })
-                .waitSeconds(1)
-                .turn(Math.toRadians(-90))
-                .waitSeconds(1)
-                .forward(39.5)
-                .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(500);
-                    right_claw.open();
-                    sleep(1000);
-                    arm.arm_fold();
-                    sleep(500);
-                })
-                .back(4)
-                .strafeRight(23)
-                .forward(10)
-                .build();
-    }
-
-    private void buildRedZone1Trajectory() {
-        Pose2d startPose = new Pose2d(0, 0, 0);
-        drive.setPoseEstimate(startPose);
-        trajRedZone1 = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(1)
-                .addTemporalMarker(() -> {
-                    right_claw.close();
-                    left_claw.close();
-                    sleep(500);
-                })
-                .waitSeconds(1)
-                .forward(25)
+                .forward(26)
                 .turn(Math.toRadians(55))
-                .forward(0.89878)
+                .forward(1)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     left_claw.open();
@@ -166,9 +177,8 @@ public class FarRedAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-145))
-                .forward(22.5)
+                .forward(87.756)
                 .strafeLeft(10)
-                .forward(18)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -178,7 +188,7 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .back(4)
-                .strafeRight(32)
+                .strafeRight(31.5)
                 .forward(10)
                 .build();
     }

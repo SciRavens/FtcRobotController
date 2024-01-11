@@ -51,7 +51,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
         }
 
         if(opModeIsActive()) {
-            //zone = 3;
+            zone = 3;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
