@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ public class RobotTeleop extends LinearOpMode {
     public Slider slider;
     public Arm arm;
     public Claw left_claw, right_claw;
+    RevBlinkinLedDriver.BlinkinPattern pattern;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,9 +23,10 @@ public class RobotTeleop extends LinearOpMode {
         arm = new Arm(robot, gamepad2);
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
         //left_claw = new Claw(robot.servoCR, 0.75, 1);
-
+        pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
         waitForStart();
+        robot.led.setPattern(pattern);
         while(opModeIsActive()) {
             DT.drive();
             DL.launchDrone();
