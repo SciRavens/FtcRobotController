@@ -46,13 +46,13 @@ public class CloseRedAutonomous extends LinearOpMode {
         // Detect the zone
         for (int i = 0; i < 10; i++) {
             zone = tge.getZone();
-            sleep(100);
+            sleep(400);
             telemetry.addData("Zone number:", zone);
             telemetry.update();
         }
 
         if(opModeIsActive()) {
-            zone = 2;
+            //zone = 2;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajRedZone1);;
@@ -90,7 +90,7 @@ public class CloseRedAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(-90))
                 .waitSeconds(1)
-                .forward(27.25)
+                .forward(29.77)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);

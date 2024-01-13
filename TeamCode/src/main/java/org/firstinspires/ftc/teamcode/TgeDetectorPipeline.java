@@ -14,11 +14,12 @@ import java.util.Objects;
 
 public class TgeDetectorPipeline extends OpenCvPipeline {
 
-    Rect z1Rect = new Rect(20, 280, 150, 150);
-    Rect z2Rect = new Rect(125, 220, 150, 150);
-    Rect z3Rect = new Rect(480, 220, 150, 150);
+    Rect z1Rect = new Rect(0, 300, 75, 150);
+    Rect z2Rect = new Rect(220, 270, 120, 120);
+    Rect z3Rect = new Rect(475  , 293, 150, 150);
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
+    Scalar grey = new Scalar(93, 93, 93);
 
     String tgeColor = "blue";
     int tgeZone = 1;
@@ -33,6 +34,10 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         double redDist[] = new double[3];
         Scalar z1AvgColor, z2AvgColor, z3AvgColor;
         Mat z1, z2, z3;
+        double colorDist;
+
+        //Creating duplicate of original frame with no edits
+       // original = frame.clone();
 
         z1 = frame.submat(z1Rect);
         z2 = frame.submat(z2Rect);
@@ -41,6 +46,7 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         z1AvgColor = Core.mean(z1);
         z2AvgColor = Core.mean(z2);
         z3AvgColor = Core.mean(z3);
+
 
         blueDist[0] = colorDist(z1AvgColor, blue);
         blueDist[1] = colorDist(z2AvgColor, blue);
@@ -62,8 +68,8 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         }
 
         tgeColor = "blue";
-        //tgeZone = 1;
         tgeZone = 3;
+        colorDist = blueDist[bluemin];
         if (blueDist[bluemin] < 190) {
             tgeZone = bluemin + 1;
         }
@@ -74,6 +80,7 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         if (redDist[redmin] < 190) {
             tgeZone = redmin + 1;
         }
+
         return frame;
     }
 

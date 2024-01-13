@@ -18,6 +18,8 @@ public class SpikeDetection extends OpMode {
 
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
+    Scalar grey = new Scalar(93, 93, 93);
+
 
     private SpikeDetectorPipeline spikeDetectorPipeline;
     private OpenCvCamera camera;
@@ -50,6 +52,9 @@ public class SpikeDetection extends OpMode {
         dashboardTelemetry.addData("Spike Zone", spikeDetectorPipeline.getSpikeZone());
         dashboardTelemetry.addData("Spike ColorDist", spikeDetectorPipeline.colorDist);
         dashboardTelemetry.update();
+        telemetry.addData("Spike Zone", spikeDetectorPipeline.getSpikeZone());
+        telemetry.addData("Spike ColorDist", spikeDetectorPipeline.colorDist);
+        telemetry.update();
     }
 
 }

@@ -43,15 +43,15 @@ public class CloseBlueAutonomous extends LinearOpMode {
             return;
         }
         // Detect the zone
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             zone = tge.getZone();
-            sleep(100);
+            sleep(200);
             telemetry.addData("Zone number:", zone);
             telemetry.update();
         }
 
         if(opModeIsActive()) {
-            zone = 3;
+            //zone = 3;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
@@ -114,7 +114,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .waitSeconds(1)
-                .forward(50)
+                .forward(27)
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);

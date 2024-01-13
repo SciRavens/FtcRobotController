@@ -48,13 +48,13 @@ public class FarRedAutonomous extends LinearOpMode {
         // Detect the zone
         for (int i = 0; i < 10; i++) {
             zone = tge.getZone();
-            sleep(100);
+            sleep(200);
             telemetry.addData("Zone number:", zone);
             telemetry.update();
         }
 
         if(opModeIsActive()) {
-            zone = 3;
+            //zone = 3;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
@@ -70,10 +70,10 @@ public class FarRedAutonomous extends LinearOpMode {
 
     }
 
-    private void buildBlueZone1Trajectory() {
+    private void buildBlueZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
+        trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.close();
@@ -154,10 +154,10 @@ public class FarRedAutonomous extends LinearOpMode {
 
     }
 
-    private void buildBlueZone3Trajectory() {
+    private void buildBlueZone1Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
+        trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.close();
@@ -165,7 +165,7 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .waitSeconds(1)
-                .forward(26)
+                .forward(25)
                 .turn(Math.toRadians(55))
                 .forward(1)
                 .waitSeconds(1)
@@ -177,7 +177,7 @@ public class FarRedAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(-145))
-                .forward(87.756)
+                .forward(89)
                 .strafeLeft(10)
                 .addTemporalMarker(() -> {
                     slider.auton();

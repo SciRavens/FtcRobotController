@@ -15,7 +15,7 @@ public class DroneLauncher {
 
     public void launchDrone()
     {
-        if (gamepad.a) {
+        if (gamepad.b) {
             robot.servoDrone.setPosition(pos_release);
         }
         holdDrone();
@@ -23,7 +23,7 @@ public class DroneLauncher {
 
     public void holdDrone()
     {
-        if (gamepad.b) {
+        if (gamepad.a) {
             robot.servoDrone.setPosition(pos_hold);
         }
     }

@@ -14,9 +14,9 @@ import java.util.Objects;
 
 public class SpikeDetectorPipeline extends OpenCvPipeline {
 
-    Rect z1Rect = new Rect(20, 280, 150, 150);
-    Rect z2Rect = new Rect(125, 220, 150, 150);
-    Rect z3Rect = new Rect(480, 220, 150, 150);
+    Rect z1Rect = new Rect(0, 300, 75, 150);
+    Rect z2Rect = new Rect(220, 270, 120, 120);
+    Rect z3Rect = new Rect(475  , 293, 150, 150);
 
     HashMap<Integer, Rect> zoneRects = new HashMap<Integer, Rect>() {{
         put(1, z1Rect);

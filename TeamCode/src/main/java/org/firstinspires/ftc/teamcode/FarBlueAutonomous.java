@@ -37,6 +37,7 @@ public class FarBlueAutonomous extends LinearOpMode {
         tge = new TgeDetection(robot);
 
 
+
         buildBlueZone1Trajectory();
         buildBlueZone2Trajectory();
         buildBlueZone3Trajectory();
@@ -48,13 +49,13 @@ public class FarBlueAutonomous extends LinearOpMode {
         // Detect the zone
         for (int i = 0; i < 10; i++) {
             zone = tge.getZone();
-            sleep(100);
+            sleep(200);
             telemetry.addData("Zone number:", zone);
             telemetry.update();
         }
 
         if(opModeIsActive()) {
-            zone = 1;
+            //zone = 1;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
@@ -83,12 +84,12 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(22)
                 .turn(Math.toRadians(50))
-                .forward(3)
+                .forward(4)
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);
                 })
-                .back(3)
+                .back(4)
                 .turn(Math.toRadians(-50))
                 .waitSeconds(1)
                 .back(19)
@@ -99,7 +100,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(90))
                 .waitSeconds(2)
-                .forward(70)
+                .forward(71)
                 .strafeRight(14.25)
                 .forward(18.25)
                 .addTemporalMarker(() -> {
@@ -111,7 +112,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                 })
                 .back(4)
                 .strafeLeft(17)
-                .forward(10)
+                .forward(9)
                 .build();
     }
 
@@ -138,7 +139,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
-                .forward(87)
+                .forward(87.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -188,7 +189,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .back(4)
-                .strafeLeft(35)
+                .strafeLeft(31)
                 .forward(10)
                 .build();
     }
