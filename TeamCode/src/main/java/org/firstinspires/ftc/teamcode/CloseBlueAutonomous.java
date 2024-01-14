@@ -165,7 +165,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(26)
                 .turn(Math.toRadians(-55))
-                .forward(3)
+                .forward(1.27)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.open();
@@ -175,9 +175,9 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(145))
-                .forward(21)
+                .forward(21.5)
                 .strafeRight(8)
-                .forward(20)
+                .forward(20.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
