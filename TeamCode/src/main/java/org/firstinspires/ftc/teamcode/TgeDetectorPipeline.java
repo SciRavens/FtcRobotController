@@ -14,30 +14,34 @@ import java.util.Objects;
 
 public class TgeDetectorPipeline extends OpenCvPipeline {
 
-    Rect z1Rect = new Rect(0, 300, 75, 150);
-    Rect z2Rect = new Rect(220, 270, 120, 120);
-    Rect z3Rect = new Rect(475  , 293, 150, 150);
+
+
+    Rect z1Rect = new Rect(78, 20, 100, 100);
+    Rect z2Rect = new Rect(290, 8, 100, 100);
+    Rect z3Rect = new Rect(465  , 20, 100, 100);
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
-    Scalar grey = new Scalar(93, 93, 93);
 
-    String tgeColor = "blue";
-    int tgeZone = 1;
+    Scalar tgeColor;
+    int tgeZone = -1;
+    int defaultZone = 1;
+    double THRESHOLD = 180;
+    Scalar z1AvgColor, z2AvgColor, z3AvgColor;
 
-    public TgeDetectorPipeline() {
+    public TgeDetectorPipeline(String color) {
         super();
+        if (color.equals("blue")) {
+            tgeColor = blue; // Blue
+        } else {
+            tgeColor = red; // Red
+        }
     }
 
     @Override
     public Mat processFrame(Mat frame) {
-        double blueDist[] = new double[3];
-        double redDist[] = new double[3];
-        Scalar z1AvgColor, z2AvgColor, z3AvgColor;
+        double dist[] = new double[3];
+        //Scalar z1AvgColor, z2AvgColor, z3AvgColor;
         Mat z1, z2, z3;
-        double colorDist;
-
-        //Creating duplicate of original frame with no edits
-       // original = frame.clone();
 
         z1 = frame.submat(z1Rect);
         z2 = frame.submat(z2Rect);
@@ -47,54 +51,67 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
         z2AvgColor = Core.mean(z2);
         z3AvgColor = Core.mean(z3);
 
+        //z1.release();
+        //z2.release();
+        //z3.release();
 
-        blueDist[0] = colorDist(z1AvgColor, blue);
-        blueDist[1] = colorDist(z2AvgColor, blue);
-        blueDist[2] = colorDist(z3AvgColor, blue);
+        dist[0] = colorDist(z1AvgColor, tgeColor);
+        dist[1] = colorDist(z2AvgColor, tgeColor);
+        dist[2] = colorDist(z3AvgColor, tgeColor);
 
-        redDist[0] = colorDist(z1AvgColor, red);
-        redDist[1] = colorDist(z2AvgColor, red);
-        redDist[2] = colorDist(z3AvgColor, red);
-
-        int bluemin = 0;
-        int redmin = 0;
+        int min = 0;
         for (int i = 1; i < 3; i++) {
-            if (blueDist[i] < blueDist[bluemin]) {
-                bluemin = i;
-            }
-            if (redDist[i] < redDist[redmin]) {
-                redmin = i;
+            if (dist[i] < dist[min]) {
+                min = i;
             }
         }
-
-        tgeColor = "blue";
-        tgeZone = 3;
-        colorDist = blueDist[bluemin];
-        if (blueDist[bluemin] < 190) {
-            tgeZone = bluemin + 1;
+        /*
+        if (dist[min] < THRESHOLD) {
+            tgeZone = defaultZone;
+        } else {
+            tgeZone = min + 1;
         }
-        if (redDist[redmin] < blueDist[bluemin]) {
-            tgeZone = redmin + 1;
-            tgeColor = "red";
-        }
-        if (redDist[redmin] < 190) {
-            tgeZone = redmin + 1;
-        }
-
+         */
+        tgeZone = min + 1;
         return frame;
     }
 
     public double colorDist(Scalar c1, Scalar c2){
-        double rDiff = c1.val[0] - c2.val[0];
-        double gDiff = c1.val[1] - c2.val[1];
-        double bDiff = c1.val[2] - c2.val[2];
-        return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+       // double rDiff = c1.val[0] - c2.val[0];
+        //double gDiff = c1.val[1] - c2.val[1];
+        //double bDiff = c1.val[2] - c2.val[2];
+        //return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+        double dR = c1.val[0]-c2.val[0];
+        double dG = c1.val[1]-c2.val[1];
+        double dB = c1.val[2]-c2.val[2];
+        double R = (c1.val[0] + c2.val[0])/2;
+        if(R < 128){
+            return Math.sqrt(
+                    2*dR*dR + 4*dG*dG + 3*dB*dB
+            );
+        }
+        return Math.sqrt(
+                3*dR*dR + 4*dG*dG + 2*dB*dB
+        );
     }
 
     public int getTgeZone() {
         return tgeZone;
     }
-    public String getTgeColor() {
-        return tgeColor;
+    public void setTgeColor(String color) {
+        if (color.equals("blue")) {
+            tgeColor = blue; // Blue
+        } else {
+            tgeColor = red; // Red
+        }
+    }
+    public Scalar getZ1() {
+        return z1AvgColor;
+    }
+    public Scalar getZ2() {
+        return z2AvgColor;
+    }
+    public Scalar getZ3() {
+        return z3AvgColor;
     }
 }

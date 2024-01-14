@@ -21,6 +21,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
     TrajectorySequence trajBlueZone1;
     TrajectorySequence trajBlueZone2;
     TrajectorySequence trajBlueZone3;
+    Leds leds;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -31,24 +32,34 @@ public class CloseBlueAutonomous extends LinearOpMode {
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
         //tag = new AprilTag(robot);
-        tge = new TgeDetection(robot);
+        tge = new TgeDetection(robot, "blue");
+        leds = new Leds(robot);
 
         buildBlueZone1Trajectory();
         buildBlueZone2Trajectory();
         buildBlueZone3Trajectory();
 
-        waitForStart();
+        while(tge.getZone() == -1) {
+            telemetry.addData("CAMERA INIT:", zone);
+            telemetry.update();
+            sleep(100);
+        }
+        zone = tge.getZone();
+        telemetry.addData("INIT Zone number:", zone);
+        telemetry.update();
 
+        waitForStart();
         if(isStopRequested()) {
             return;
         }
-        // Detect the zone
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             zone = tge.getZone();
-            sleep(200);
             telemetry.addData("Zone number:", zone);
             telemetry.update();
+            sleep(100);
         }
+        leds.setPattern(0);
+
 
         if(opModeIsActive()) {
             //zone = 3;
@@ -88,7 +99,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
-                .forward(27)
+                .forward(28)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);

@@ -14,9 +14,9 @@ import java.util.Objects;
 
 public class SpikeDetectorPipeline extends OpenCvPipeline {
 
-    Rect z1Rect = new Rect(0, 300, 75, 150);
-    Rect z2Rect = new Rect(220, 270, 120, 120);
-    Rect z3Rect = new Rect(475  , 293, 150, 150);
+    Rect z1Rect = new Rect(78, 20, 100, 100);
+    Rect z2Rect = new Rect(290, 8, 100, 100);
+    Rect z3Rect = new Rect(465  , 20, 100, 100);
 
     HashMap<Integer, Rect> zoneRects = new HashMap<Integer, Rect>() {{
         put(1, z1Rect);
@@ -79,9 +79,14 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
             }
         }
 
-        spikeColor = blue;
-        spikeZone = 3;
-        colorDist = blueDist[bluemin];
+        if (spikeColor == blue) {
+            colorDist = blueDist[bluemin];
+            spikeZone = bluemin + 1;
+        } else {
+            colorDist = redDist[redmin];
+            spikeZone = redmin + 1;
+        }
+        /*
         if (blueDist[bluemin] < 190) {
             spikeZone = bluemin + 1;
         }
@@ -92,6 +97,7 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
         if (redDist[redmin] < 190) {
             spikeZone = redmin + 1;
         }
+         */
 
         for (int z = 1; z <= 3; z++) {
             Scalar color = grey;
@@ -108,10 +114,18 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
     }
 
     public double colorDist(Scalar c1, Scalar c2){
-        double rDiff = c1.val[0] - c2.val[0];
-        double gDiff = c1.val[1] - c2.val[1];
-        double bDiff = c1.val[2] - c2.val[2];
-        return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+        double dR = c1.val[0]-c2.val[0];
+        double dG = c1.val[1]-c2.val[1];
+        double dB = c1.val[2]-c2.val[2];
+        double R = (c1.val[0] + c2.val[0])/2;
+        if(R < 128){
+            return Math.sqrt(
+                    2*dR*dR + 4*dG*dG + 3*dB*dB
+            );
+        }
+        return Math.sqrt(
+                3*dR*dR + 4*dG*dG + 2*dB*dB
+        );
     }
 
 
@@ -120,5 +134,8 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
     }
     public Scalar getSpikeColor() {
         return spikeColor;
+    }
+    public void setSpikeColor(Scalar color) {
+        spikeColor = color;
     }
 }

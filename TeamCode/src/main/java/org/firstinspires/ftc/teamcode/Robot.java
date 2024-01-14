@@ -56,6 +56,7 @@ public class Robot {
         webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         sampleDrive = new SampleMecanumDrive(hardwareMap);
         led = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+        led.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
     }
 
 }

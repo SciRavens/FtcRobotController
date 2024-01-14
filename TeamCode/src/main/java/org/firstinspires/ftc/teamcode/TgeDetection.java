@@ -17,9 +17,9 @@ public class TgeDetection {
 
     private TgeDetectorPipeline tgeDetectorPipeline;
 
-    public TgeDetection(Robot robot) {
+    public TgeDetection(Robot robot, String color) {
         this.robot = robot;
-        tgeDetectorPipeline = new TgeDetectorPipeline();
+        tgeDetectorPipeline = new TgeDetectorPipeline(color);
         camera = OpenCvCameraFactory.getInstance().createWebcam(robot.webcam);
         camera.setPipeline(tgeDetectorPipeline);
 
@@ -33,12 +33,27 @@ public class TgeDetection {
         });
     }
 
+    public void setColor(String color) {
+        tgeDetectorPipeline.setTgeColor(color);
+    }
     public int getZone()
     {
         return tgeDetectorPipeline.getTgeZone();
     }
-    public String getTgeColor()
+    public void stop() {
+        camera.closeCameraDeviceAsync(()-> {});
+    }
+    public Scalar getZ1()
     {
-        return tgeDetectorPipeline.getTgeColor();
+        return tgeDetectorPipeline.getZ1();
+    }
+    public Scalar getZ2()
+    {
+        return tgeDetectorPipeline.getZ2();
+    }
+
+    public Scalar getZ3()
+    {
+        return tgeDetectorPipeline.getZ3();
     }
 }

@@ -13,7 +13,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp(name="SpikeDetection")
-//@Disabled
 public class SpikeDetection extends OpMode {
 
     Scalar red = new Scalar(255, 0, 0);
@@ -27,8 +26,11 @@ public class SpikeDetection extends OpMode {
     private FtcDashboard dashboard = FtcDashboard.getInstance();
     private Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
+    String color = "blue";
+
     @Override
     public void init() {
+        //spikeDetectorPipeline = new SpikeDetectorPipeline(blue);
         spikeDetectorPipeline = new SpikeDetectorPipeline(blue);
 
         WebcamName webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -49,10 +51,18 @@ public class SpikeDetection extends OpMode {
 
     @Override
     public void loop() {
-        dashboardTelemetry.addData("Spike Zone", spikeDetectorPipeline.getSpikeZone());
+        if (gamepad1.a) {
+            spikeDetectorPipeline.setSpikeColor(blue);
+            color = "blue";
+
+        } else if (gamepad1.b) {
+            spikeDetectorPipeline.setSpikeColor(red);
+            color = "red";
+        }
+        dashboardTelemetry.addData("Detecting"+ color + " Spike Zone", spikeDetectorPipeline.getSpikeZone());
         dashboardTelemetry.addData("Spike ColorDist", spikeDetectorPipeline.colorDist);
         dashboardTelemetry.update();
-        telemetry.addData("Spike Zone", spikeDetectorPipeline.getSpikeZone());
+        telemetry.addData("Detecting " + color + " Spike Zone", spikeDetectorPipeline.getSpikeZone());
         telemetry.addData("Spike ColorDist", spikeDetectorPipeline.colorDist);
         telemetry.update();
     }

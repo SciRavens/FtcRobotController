@@ -22,11 +22,11 @@ public class RobotTeleop extends LinearOpMode {
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
-        //left_claw = new Claw(robot.servoCR, 0.75, 1);
-        pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
+        Leds leds = new Leds(robot);
+
         waitForStart();
-        robot.led.setPattern(pattern);
+        leds.setPattern(2);
         while(opModeIsActive()) {
             DT.drive();
             DL.launchDrone();

@@ -17,10 +17,11 @@ public class FarBlueAutonomous extends LinearOpMode {
     public AprilTag tag;
     public TgeDetection tge;
     String curAlliance = "red";
-    public int zone = 2;
+    public int zone = -1;
     TrajectorySequence trajBlueZone1;
     TrajectorySequence trajBlueZone2;
     TrajectorySequence trajBlueZone3;
+    Leds leds;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,31 +29,33 @@ public class FarBlueAutonomous extends LinearOpMode {
         drive = robot.sampleDrive;
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
-
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
-
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
+        leds = new Leds(robot);
 
         //tag = new AprilTag(robot);
-        tge = new TgeDetection(robot);
-
-
-
+        tge = new TgeDetection(robot, "blue");
         buildBlueZone1Trajectory();
         buildBlueZone2Trajectory();
         buildBlueZone3Trajectory();
+        while(tge.getZone() == -1) {
+            telemetry.addData("CAMERA INIT:", zone);
+            telemetry.update();
+            sleep(100);
+        }
+        zone = tge.getZone();
+        telemetry.addData("INIT Zone number:", zone);
+        telemetry.update();
 
         waitForStart();
         if(isStopRequested()) {
             return;
         }
-        // Detect the zone
-        for (int i = 0; i < 10; i++) {
-            zone = tge.getZone();
-            sleep(200);
-            telemetry.addData("Zone number:", zone);
-            telemetry.update();
-        }
+        zone = tge.getZone();
+        telemetry.addData("Zone number:", zone);
+        telemetry.update();
+        tge.stop();
+        leds.setPattern(0);
 
         if(opModeIsActive()) {
             //zone = 1;
