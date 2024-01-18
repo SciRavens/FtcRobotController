@@ -97,6 +97,8 @@ public class FarRedAutonomous extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     left_claw.open();
                     sleep(500);
+                    arm.arm_fold();
+                    sleep(500);
                 })
                 .back(4)
                 .turn(Math.toRadians(50))
@@ -117,6 +119,7 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(500);
                     right_claw.open();
                     sleep(1000);
+                    arm.arm_fold();
                     sleep(500);
                 })
                 .back(4)
@@ -174,7 +177,7 @@ public class FarRedAutonomous extends LinearOpMode {
                     left_claw.close();
                     sleep(500);
                 })
-                .waitSeconds(1)
+                .waitSeconds(7)
                 .forward(25)
                 .turn(Math.toRadians(55))
                 .forward(1)
@@ -196,10 +199,11 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(1000);
                     arm.arm_fold();
                     sleep(500);
+                    sleep(15000);
                 })
-                .back(4)
-                .strafeRight(31.5)
-                .forward(10)
+                //.back(4)
+                //.strafeRight(31.5)
+                //.forward(10)
                 .build();
     }
 
