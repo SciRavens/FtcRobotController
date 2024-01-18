@@ -88,7 +88,7 @@ public class CloseRedAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(1)
                 .strafeRight(12.5)
-                .forward(20)
+                .forward(22.5)
                 .addTemporalMarker(() -> {
                     left_claw.open();
                     sleep(500);

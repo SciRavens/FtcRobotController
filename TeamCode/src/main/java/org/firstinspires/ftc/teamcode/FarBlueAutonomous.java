@@ -111,6 +111,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                     sleep(500);
                     left_claw.open();
                     sleep(1000);
+                    arm.arm_fold();
                     sleep(500);
                 })
                 .back(4)
@@ -171,7 +172,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(26)
                 .turn(Math.toRadians(-55))
-                .forward(2)
+                .forward(1)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.open();
