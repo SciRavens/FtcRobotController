@@ -2,15 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class DroneLauncher {
+public class DroneLauncher0124backup {
     private Robot robot = null;
     private Gamepad gamepad = null;
     private double pos_hold = 1;
-    private double pos_release = 0;
-    public DroneLauncher(Robot robot, Gamepad gamepad)
+    private double pos_release = 0.65;
+    public DroneLauncher0124backup(Robot robot, Gamepad gamepad)
     {
-            this.robot = robot;
-            this.gamepad = gamepad;
+        this.robot = robot;
+        this.gamepad = gamepad;
     }
 
     public void launchDrone()

@@ -6,9 +6,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 public class Arm {
     private Robot robot;
     private Gamepad gamepad;
-    static private double pos_pixel  = 1.0;
-    static private double pos_folded  = 0.3;
-    static private double pos_backdrop  = 0.7;
+    static private double pos_pixel  = 0.1;
+    static private double pos_folded  = 1.0;
+    static private double pos_backdrop  = 0.6;
+
+    static private double pos_whitepixel = 0.215;
     public Arm(Robot robot, Gamepad gamepad) {
         this.robot = robot;
         this.gamepad = gamepad;
@@ -27,6 +29,10 @@ public class Arm {
 
     public void arm_backdrop() {
         robot.servoArm.setPosition(pos_backdrop);
+    }
+
+    public void arm_whitepixel() {
+        robot.servoArm.setPosition(pos_whitepixel);
     }
     public void operate()
     {

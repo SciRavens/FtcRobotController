@@ -201,9 +201,9 @@ public class FarRedAutonomous extends LinearOpMode {
                     sleep(500);
                     sleep(15000);
                 })
-                //.back(4)
-                //.strafeRight(31.5)
-                //.forward(10)
+                .back(4)
+                .strafeRight(31.5)
+                .forward(10)
                 .build();
     }
 
