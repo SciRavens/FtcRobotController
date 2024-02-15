@@ -58,7 +58,7 @@ public class FarBlueAutonomous extends LinearOpMode {
         leds.setPattern(0);
 
         if(opModeIsActive()) {
-            //zone = 1;
+            zone = 2;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;

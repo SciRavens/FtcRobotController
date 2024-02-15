@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Far-Blue-Meep-Autonomous")
-public class FarBlueMeepAutonomous extends LinearOpMode {
+@Autonomous(name = "Far-Red-Meep-Autonomous")
+public class FarRedMeepAutonomous extends LinearOpMode {
     public Robot robot;
     public SampleMecanumDrive drive;
     public Slider slider;
@@ -22,9 +22,9 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
     public TgeDetection tge;
     String curAlliance = "red";
     public int zone = -1;
-    TrajectorySequence trajBlueZone1;
-    TrajectorySequence trajBlueZone2;
-    TrajectorySequence trajBlueZone3;
+    TrajectorySequence trajZone1;
+    TrajectorySequence trajZone2;
+    TrajectorySequence trajZone3;
     Leds leds;
 
     @Override
@@ -44,9 +44,9 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
 
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot, "blue");
-        buildBlueZone1Trajectory();
-        buildBlueZone2Trajectory();
-        buildBlueZone3Trajectory();
+        buildRedZone1Trajectory();
+        buildRedZone2Trajectory();
+        buildRedZone3Trajectory();
         while(tge.getZone() == -1) {
             telemetry.addData("CAMERA INIT:", zone);
             telemetry.update();
@@ -69,26 +69,26 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
         leds.setPattern(0);
 
         if(opModeIsActive()) {
-            zone = 2;
+            zone = 1;
             switch(zone) {
                 case 1:
-                    robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
+                    robot.sampleDrive.followTrajectorySequence(trajZone1);;
                     break;
                 case 2:
-                    robot.sampleDrive.followTrajectorySequence(trajBlueZone2);;
+                    robot.sampleDrive.followTrajectorySequence(trajZone2);;
                     break;
                 case 3:
-                    robot.sampleDrive.followTrajectorySequence(trajBlueZone3);;
+                    robot.sampleDrive.followTrajectorySequence(trajZone3);;
                     break;
             }
         }
 
     }
 
-    private void buildBlueZone1Trajectory() {
+    private void buildRedZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
+        trajZone3 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     sleep(500);
@@ -98,20 +98,20 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .forward(22)
-                .turn(Math.toRadians(50))
+                .turn(Math.toRadians(-50))
                 .forward(4)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    left_claw.open();
                     sleep(500);
                     arm.arm_fold();
                 })
                 .back(3)
-                .turn(Math.toRadians(-50))
+                .turn(Math.toRadians(50))
                 .forward(30)
-                .turn(Math.toRadians(90))
+                .turn(Math.toRadians(-90))
                 .forward(72)
-                .strafeLeft(37)
-                .forward(16)
+                .strafeRight(22)
+                .forward(16.15)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     arm.arm_backdrop();
@@ -119,13 +119,13 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    left_claw.open();
+                    right_claw.open();
                 })
                 .waitSeconds(0.5)
                 .back(15)
-                .strafeRight(32)
-                .turn(Math.toRadians(180))
-                .back(23)
+                .strafeLeft(29.5)
+                .turn(Math.toRadians(-180))
+                .back(22)
                 .build();
 
                 /*
@@ -158,46 +158,49 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
 
     }
 
-    private void buildBlueZone2Trajectory() {
+    private void buildRedZone2Trajectory() {
         //Pose2d startPose = new Pose2d(-35.5, 64, Math.toRadians(270));
         Pose2d startPose = new Pose2d(0, 0, 0);
         //drive.setPoseEstimate(startPose);
-        trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(52)
-                .turn(Math.toRadians(185))
+        trajZone2 = drive.trajectorySequenceBuilder(startPose)
+                .forward(53.007)
+                .turn(Math.toRadians(-185))
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> { // drops purple pixel
                     arm.arm_pixel();
                     sleep(500);
-                    right_claw.open();
+                    left_claw.open();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
                 })
                 .back(5)
-                .turn(Math.toRadians(-93))
+                .turn(Math.toRadians(93))
                 .waitSeconds(0.5)
                 .forward(70)
-                .strafeLeft(26.5)
+                .strafeRight(22)
                 .waitSeconds(0.5)
-                .forward(19)
+                .forward(20)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
                     right_claw.open();
-                    left_claw.open();
+                    //left_claw.open();
                     sleep(500);
+                    //left_claw.close();
+                    //right_claw.close();
+                    //sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })
                 .back(10)
+                .waitSeconds(1)
+                .strafeLeft(22)
+                .waitSeconds(1)
+                .turn(Math.toRadians(-180))
                 .waitSeconds(0.5)
-                .strafeRight(21.5)
-                .waitSeconds(0.5)
-                .turn(Math.toRadians(180))
-                .waitSeconds(0.5)
-                .back(15)
+                .back(13)
                 .build();
     }
 
@@ -205,7 +208,7 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
         //Pose2d startPose = new Pose2d(-35.5, 64, Math.toRadians(270));
         Pose2d startPose = new Pose2d(0, 0, 0);
         //drive.setPoseEstimate(startPose);
-        trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
+        trajZone2 = drive.trajectorySequenceBuilder(startPose)
                 .forward(49.007)
                 .turn(Math.toRadians(185))
                 //.back(3)
@@ -218,14 +221,29 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                     arm.arm_backdrop();
                     sleep(500);
                 })
+                /*
+                .back(5)
+                .turn(Math.toRadians(95))
+                //.waitSeconds(1)
+                //.strafeLeft(3)
+                //.waitSeconds(1)
+                .waitSeconds(1)
+                .forward(17.5)
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    arm.arm_whitepixel();
+                    sleep(1000);
+                })
+                */
 
+                //.forward(3)
                 .addTemporalMarker(() -> {
                     right_claw.close();
                     sleep(1000);
                     arm.arm_backdrop();
                     sleep(500);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(10)
                 .turn(Math.toRadians(180))
                 .waitSeconds(0.5)
                 .forward(92)
@@ -250,10 +268,10 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                 .build();
     }
 
-    private void buildBlueZone3Trajectory() {
+    private void buildRedZone1Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
+        trajZone1 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     sleep(500);
@@ -263,20 +281,20 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .forward(23)
-                .turn(Math.toRadians(-50))
+                .turn(Math.toRadians(50))
                 .forward(1)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    left_claw.open();
                     sleep(500);
                     arm.arm_fold();
                 })
                 .back(2)
-                .turn(Math.toRadians(50))
+                .turn(Math.toRadians(-50))
                 .forward(32.5)
-                .turn(Math.toRadians(90))
+                .turn(Math.toRadians(-90))
                 .forward(72)
-                .strafeLeft(25.5)
-                .forward(16.5)
+                .strafeRight(18.3)
+                .forward(17)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     arm.arm_backdrop();
@@ -284,13 +302,13 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    left_claw.open();
+                    right_claw.open();
                 })
                 .waitSeconds(0.5)
                 .back(15)
-                .strafeRight(17)
-                .turn(Math.toRadians(180))
-                .back(23)
+                .strafeLeft(18)
+                .turn(Math.toRadians(-180))
+                .back(18)
                 .build();
     }
 

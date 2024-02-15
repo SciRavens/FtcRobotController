@@ -6,7 +6,7 @@ public class DroneLauncher {
     private Robot robot = null;
     private Gamepad gamepad = null;
     private double pos_hold = 1;
-    private double pos_release = 0;
+    private double pos_release = 0.8;
     public DroneLauncher(Robot robot, Gamepad gamepad)
     {
             this.robot = robot;
