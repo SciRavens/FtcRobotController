@@ -55,7 +55,7 @@ private int cur = 1;
         if (gamepad2.right_bumper || gamepad1.right_bumper) {
             cur = (cur + 1) % leds.patterns.length;
             leds.setPattern(cur);
-            telemetry.addData("SETTING COLR", cur);
+            telemetry.addData("SETTING COLR", leds.patterns[cur].toString());
             telemetry.update();
         }
     }
