@@ -163,7 +163,7 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, 0);
         //drive.setPoseEstimate(startPose);
         trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(52)
+                .forward(50.5)
                 .turn(Math.toRadians(185))
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> { // drops purple pixel
@@ -174,7 +174,7 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
                     arm.arm_backdrop();
                     sleep(500);
                 })
-                .back(5)
+                .back(6.5)
                 .turn(Math.toRadians(-93))
                 .waitSeconds(0.5)
                 .forward(70)
