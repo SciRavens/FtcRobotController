@@ -16,9 +16,9 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
 
 
 
-    Rect z1Rect = new Rect(78, 20, 100, 100);
-    Rect z2Rect = new Rect(290, 8, 100, 100);
-    Rect z3Rect = new Rect(465  , 20, 100, 100);
+    Rect z1Rect = new Rect(105, 210, 65, 65);
+    Rect z2Rect = new Rect(240, 200, 65, 65);
+    Rect z3Rect = new Rect(375  , 205, 65, 65);
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
 

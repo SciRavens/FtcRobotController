@@ -69,7 +69,7 @@ public class FarBlueMeepAutonomous extends LinearOpMode {
         leds.setPattern(0);
 
         if(opModeIsActive()) {
-            zone = 2;
+            //zone = 2;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;

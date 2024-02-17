@@ -13,10 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class SpikeDetectorPipeline extends OpenCvPipeline {
-
-    Rect z1Rect = new Rect(78, 20, 100, 100);
-    Rect z2Rect = new Rect(290, 8, 100, 100);
-    Rect z3Rect = new Rect(465  , 20, 100, 100);
+    Rect z1Rect = new Rect(105, 210, 65, 65);
+    Rect z2Rect = new Rect(240, 200, 65, 65);
+    Rect z3Rect = new Rect(375  , 205, 65, 65);
 
     HashMap<Integer, Rect> zoneRects = new HashMap<Integer, Rect>() {{
         put(1, z1Rect);
@@ -40,7 +39,48 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
         this.spikeColor = spikeColor;
     }
 
+    @Override
+    public Mat processFrame(Mat frame) {
+        double dist[] = new double[3];
+        Mat z1, z2, z3;
+        Scalar z1AvgColor, z2AvgColor, z3AvgColor;
 
+        z1 = frame.submat(z1Rect);
+        z2 = frame.submat(z2Rect);
+        z3 = frame.submat(z3Rect);
+
+        z1AvgColor = Core.mean(z1);
+        z2AvgColor = Core.mean(z2);
+        z3AvgColor = Core.mean(z3);
+
+        dist[0] = colorDist(z1AvgColor, spikeColor);
+        dist[1] = colorDist(z2AvgColor, spikeColor);
+        dist[2] = colorDist(z3AvgColor, spikeColor);
+
+        int min = 0;
+        for (int i = 1; i < 3; i++) {
+            if (dist[i] < dist[min]) {
+                min = i;
+            }
+        }
+        spikeZone = min + 1;
+
+        for (int z = 1; z <= 3; z++) {
+            Scalar color = grey;
+            if (z == spikeZone)
+                color = spikeColor;
+            Imgproc.rectangle(
+                    frame,
+                    Objects.requireNonNull(zoneRects.get(z)),
+                    color,
+                    4
+            );
+        }
+
+        return frame;
+    }
+
+    /*
     @Override
     public Mat processFrame(Mat frame) {
         double blueDist[] = new double[3];
@@ -86,18 +126,6 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
             colorDist = redDist[redmin];
             spikeZone = redmin + 1;
         }
-        /*
-        if (blueDist[bluemin] < 190) {
-            spikeZone = bluemin + 1;
-        }
-        if (redDist[redmin] < blueDist[bluemin]) {
-            spikeZone = redmin + 1;
-            spikeColor = red;
-        }
-        if (redDist[redmin] < 190) {
-            spikeZone = redmin + 1;
-        }
-         */
 
         for (int z = 1; z <= 3; z++) {
             Scalar color = grey;
@@ -110,8 +138,10 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
                     4
             );
         }
+
         return frame;
     }
+   */
 
     public double colorDist(Scalar c1, Scalar c2){
         double dR = c1.val[0]-c2.val[0];
