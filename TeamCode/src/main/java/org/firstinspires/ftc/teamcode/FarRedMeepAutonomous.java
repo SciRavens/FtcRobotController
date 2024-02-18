@@ -110,7 +110,7 @@ public class FarRedMeepAutonomous extends LinearOpMode {
                 .forward(30)
                 .turn(Math.toRadians(-90))
                 .forward(72)
-                .strafeRight(22)
+                .strafeRight(30)//p
                 .forward(16.15)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -125,7 +125,7 @@ public class FarRedMeepAutonomous extends LinearOpMode {
                 .back(15)
                 .strafeLeft(29.5)
                 .turn(Math.toRadians(-180))
-                .back(22)
+                .back(20)
                 .build();
 
                 /*
@@ -178,9 +178,9 @@ public class FarRedMeepAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(93))
                 .waitSeconds(0.5)
                 .forward(70)
-                .strafeRight(22)
+                .strafeRight(25)
                 .waitSeconds(0.5)
-                .forward(20)
+                .forward(17.5) // go to the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
@@ -198,9 +198,9 @@ public class FarRedMeepAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .strafeLeft(22)
                 .waitSeconds(1)
-                .turn(Math.toRadians(-180))
+                .turn(Math.toRadians(-180)) // 3.14159265359
                 .waitSeconds(0.5)
-                .back(13)
+                .back(15)
                 .build();
     }
 
@@ -294,7 +294,7 @@ public class FarRedMeepAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(-90))
                 .forward(72)
                 .strafeRight(18.3)
-                .forward(17)
+                .forward(16)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     arm.arm_backdrop();
@@ -306,9 +306,9 @@ public class FarRedMeepAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .back(15)
-                .strafeLeft(18)
+                .strafeLeft(16)
                 .turn(Math.toRadians(-180))
-                .back(18)
+                .back(19)
                 .build();
     }
 
