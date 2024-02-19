@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Close-Blue-Autonomous")
-public class CloseBlueAutonomous extends LinearOpMode {
+@Autonomous(name = "Obsolete-Far-Red-Autonomous")
+@Disabled
+public class ObsoleteFarRedAutonomous extends LinearOpMode {
     public Robot robot;
     public SampleMecanumDrive drive;
     public Slider slider;
@@ -21,6 +23,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
     TrajectorySequence trajBlueZone1;
     TrajectorySequence trajBlueZone2;
     TrajectorySequence trajBlueZone3;
+
     Leds leds;
 
     @Override
@@ -29,12 +32,14 @@ public class CloseBlueAutonomous extends LinearOpMode {
         drive = robot.sampleDrive;
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
+
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
+
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
-        //tag = new AprilTag(robot);
-        tge = new TgeDetection(robot, "blue");
         leds = new Leds(robot);
-        arm.arm_fold();
+
+        //tag = new AprilTag(robot);
+        tge = new TgeDetection(robot, "red");
 
         buildBlueZone1Trajectory();
         buildBlueZone2Trajectory();
@@ -49,22 +54,15 @@ public class CloseBlueAutonomous extends LinearOpMode {
         telemetry.addData("INIT Zone number:", zone);
         telemetry.update();
 
-
         waitForStart();
         if(isStopRequested()) {
             return;
         }
-        left_claw.close();
-        right_claw.close();
-        arm.arm_pixel();
+        zone = tge.getZone();
+        telemetry.addData("Zone number:", zone);
+        telemetry.update();
 
-        for (int i = 0; i < 5; i++) {
-            zone = tge.getZone();
-            telemetry.addData("Zone number:", zone);
-            telemetry.update();
-            sleep(100);
-        }
-        leds.setPattern(0);
+        leds.setPattern(1);
 
 
         if(opModeIsActive()) {
@@ -84,35 +82,51 @@ public class CloseBlueAutonomous extends LinearOpMode {
 
     }
 
-    private void buildBlueZone1Trajectory() {
+    private void buildBlueZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
+        trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
-                .strafeLeft(13.25)
-                .forward(20)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    right_claw.close();
+                    left_claw.close();
                     sleep(500);
+                })
+                .waitSeconds(1)
+                .forward(22)
+                .turn(Math.toRadians(-50))
+                .forward(4)
+                .addTemporalMarker(() -> {
+                    left_claw.open();
+                    sleep(500);
+                    arm.arm_fold();
+                    sleep(500);
+                })
+                .back(4)
+                .turn(Math.toRadians(50))
+                .waitSeconds(1)
+                .back(19)
+                .addTemporalMarker(() -> {
                     arm.arm_backdrop();
                     sleep(500);
                 })
                 .waitSeconds(1)
-                .turn(Math.toRadians(90))
-                .waitSeconds(1)
-                .forward(29.25)
+                .turn(Math.toRadians(-90))
+                .waitSeconds(2)
+                .forward(70)
+                .strafeLeft(22)
+                .forward(19)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
-                    left_claw.open();
+                    right_claw.open();
                     sleep(1000);
                     arm.arm_fold();
                     sleep(500);
                 })
                 .back(4)
-                .strafeLeft(17.25)
-                .turn(Math.toRadians(180))
-                .back(10)
+                .strafeRight(21)
+                .forward(10)
                 .build();
     }
 
@@ -121,65 +135,77 @@ public class CloseBlueAutonomous extends LinearOpMode {
         drive.setPoseEstimate(startPose);
         trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    right_claw.close();
+                    left_claw.close();
+                    sleep(500);
+                })
+                .waitSeconds(1)
                 .forward(27)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    left_claw.open();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
+                    left_claw.close();
+                    sleep(500);
                 })
                 .waitSeconds(1)
-                .back(1.25)
-                .turn(Math.toRadians(90))
+                .turn(Math.toRadians(-90))
                 .waitSeconds(1)
-                .forward(41.25)
+                .forward(87)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
-                    left_claw.open();
+                    right_claw.open();
                     sleep(1000);
                     arm.arm_fold();
                     sleep(500);
                 })
                 .back(4)
-                .strafeLeft(22.75)
-                .turn(Math.toRadians(180))
-                .back(7)
+                .strafeRight(25)
+                .forward(10)
                 .build();
+
     }
 
-    private void buildBlueZone3Trajectory() {
+    private void buildBlueZone1Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
-        trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(1)
-                .forward(26)
-                .turn(Math.toRadians(-55))
-                .forward(1.27)
+        trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    right_claw.close();
+                    left_claw.close();
+                    sleep(500);
+                })
+                .waitSeconds(7)
+                .forward(25)
+                .turn(Math.toRadians(55))
+                .forward(1)
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    left_claw.open();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
                 })
                 .waitSeconds(1)
-                .turn(Math.toRadians(145))
-                .forward(21.5)
-                .strafeRight(8)
-                .forward(20.5)
+                .turn(Math.toRadians(-145))
+                .forward(89)
+                .strafeLeft(10)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
-                    left_claw.open();
+                    right_claw.open();
                     sleep(1000);
                     arm.arm_fold();
                     sleep(500);
+                    sleep(15000);
                 })
                 .back(4)
-                .strafeLeft(35)
-                .turn(Math.toRadians(180))
-                .back(10)
+                .strafeRight(31.5)
+                .forward(10)
                 .build();
     }
 

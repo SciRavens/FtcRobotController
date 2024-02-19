@@ -22,6 +22,8 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
     Scalar red = new Scalar(255, 0, 0);
     Scalar blue = new Scalar(0, 0, 255);
 
+    Mat z1, z2, z3;
+
     Scalar tgeColor;
     int tgeZone = -1;
     int defaultZone = 1;
@@ -41,7 +43,6 @@ public class TgeDetectorPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat frame) {
         double dist[] = new double[3];
         //Scalar z1AvgColor, z2AvgColor, z3AvgColor;
-        Mat z1, z2, z3;
 
         z1 = frame.submat(z1Rect);
         z2 = frame.submat(z2Rect);
