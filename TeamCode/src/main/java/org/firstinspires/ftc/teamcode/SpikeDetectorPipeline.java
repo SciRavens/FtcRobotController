@@ -24,6 +24,8 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
     }};
 
     Mat original;
+    Mat z1, z2, z3;
+
 
     Scalar grey = new Scalar(93, 93, 93);
     Scalar red = new Scalar(255, 0, 0);
@@ -42,7 +44,6 @@ public class SpikeDetectorPipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat frame) {
         double dist[] = new double[3];
-        Mat z1, z2, z3;
         Scalar z1AvgColor, z2AvgColor, z3AvgColor;
 
         z1 = frame.submat(z1Rect);

@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Far-Blue-Autonomous")
-public class FarBlueAutonomous extends LinearOpMode {
+@Autonomous(name = "Obsolete-Far-Blue-Autonomous")
+@Disabled
+public class ObsoleteFarBlueAutonomous extends LinearOpMode {
     public Robot robot;
     public SampleMecanumDrive drive;
     public Slider slider;
@@ -33,11 +35,6 @@ public class FarBlueAutonomous extends LinearOpMode {
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
         leds = new Leds(robot);
 
-        //arm.arm_backdrop();
-        arm.arm_fold();
-        right_claw.open();
-        left_claw.open();
-
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot, "blue");
         buildBlueZone1Trajectory();
@@ -56,8 +53,6 @@ public class FarBlueAutonomous extends LinearOpMode {
         if(isStopRequested()) {
             return;
         }
-        right_claw.close();
-        left_claw.close();
         zone = tge.getZone();
         telemetry.addData("Zone number:", zone);
         telemetry.update();
@@ -65,7 +60,7 @@ public class FarBlueAutonomous extends LinearOpMode {
         leds.setPattern(0);
 
         if(opModeIsActive()) {
-            //zone = 2;
+            zone = 2;
             switch(zone) {
                 case 1:
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
@@ -85,186 +80,123 @@ public class FarBlueAutonomous extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(0.5)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
+                    right_claw.close();
+                    left_claw.close();
                     sleep(500);
                 })
-                .addTemporalMarker(() -> {
-                    arm.arm_pixel();
-                })
-                .waitSeconds(0.5)
+                .waitSeconds(1)
                 .forward(22)
                 .turn(Math.toRadians(50))
                 .forward(4)
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);
-                    arm.arm_fold();
                 })
-                .back(3)
+                .back(4)
                 .turn(Math.toRadians(-50))
-                .forward(30)
-                .turn(Math.toRadians(90))
-                .forward(72)
-                .strafeLeft(37)
-                .forward(16)
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+                .back(19)
                 .addTemporalMarker(() -> {
                     arm.arm_backdrop();
-                    slider.auton();
+                    sleep(500);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+                .turn(Math.toRadians(90))
+                .waitSeconds(2)
+                .forward(71)
+                .strafeRight(14.25)
+                .forward(18.25)
                 .addTemporalMarker(() -> {
+                slider.auton();
+                    sleep(500);
                     left_claw.open();
-                })
-                .waitSeconds(0.5)
-                .back(15)
-                .strafeRight(32)
-                .turn(Math.toRadians(180))
-                .back(23)
-                .addTemporalMarker(() -> {
+                    sleep(1000);
                     arm.arm_fold();
+                    sleep(500);
                 })
+                .back(4)
+                .strafeLeft(17)
+                .forward(9)
                 .build();
-
     }
 
     private void buildBlueZone2Trajectory() {
-        //Pose2d startPose = new Pose2d(-35.5, 64, Math.toRadians(270));
         Pose2d startPose = new Pose2d(0, 0, 0);
-        //drive.setPoseEstimate(startPose);
+        drive.setPoseEstimate(startPose);
         trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(50.5)
-                .turn(Math.toRadians(185))
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> { // drops purple pixel
-                    arm.arm_pixel();
-                    sleep(500);
-                    right_claw.open();
-                    sleep(500);
-                    arm.arm_backdrop();
-                    sleep(500);
-                })
-                .back(6.5)
-                .turn(Math.toRadians(-93))
-                .waitSeconds(0.5)
-                .forward(70)
-                .strafeLeft(26.5)
-                .waitSeconds(0.5)
-                .forward(19)
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(1000);
-                    right_claw.open();
-                    left_claw.open();
-                    sleep(500);
-                    arm.arm_fold();
-                    sleep(500);
-                })
-                .back(10)
-                .waitSeconds(0.5)
-                .strafeRight(21.5)
-                .waitSeconds(0.5)
-                .turn(Math.toRadians(180))
-                .waitSeconds(0.5)
-                .back(15)
-                .build();
-    }
-
-    private void buildBlueZone2longTrajectory() {
-        //Pose2d startPose = new Pose2d(-35.5, 64, Math.toRadians(270));
-        Pose2d startPose = new Pose2d(0, 0, 0);
-        //drive.setPoseEstimate(startPose);
-        trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(49.007)
-                .turn(Math.toRadians(185))
-                //.back(3)
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> { // drops purple pixel
-                    arm.arm_pixel();
-                    sleep(500);
-                    right_claw.open();
-                    sleep(500);
-                    arm.arm_backdrop();
-                    sleep(500);
-                })
-
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.close();
-                    sleep(1000);
-                    arm.arm_backdrop();
+                    left_claw.close();
                     sleep(500);
                 })
-                .waitSeconds(0.5)
-                .turn(Math.toRadians(180))
-                .waitSeconds(0.5)
-                .forward(92)
-                .strafeLeft(41)
-                .waitSeconds(0.5)
-                .forward(5)
-                .waitSeconds(0.5)
+                .waitSeconds(1)
+                .forward(27)
                 .addTemporalMarker(() -> {
                     right_claw.open();
-                    left_claw.open();
+                    sleep(500);
+                    arm.arm_backdrop();
                     sleep(500);
                     left_claw.close();
-                    right_claw.close();
                     sleep(500);
+                })
+                .waitSeconds(1)
+                .turn(Math.toRadians(90))
+                .waitSeconds(1)
+                .forward(87.5)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(500);
+                    left_claw.open();
+                    sleep(1000);
                     arm.arm_fold();
                     sleep(500);
                 })
-                .back(12)
-                .strafeRight(26)
-                .turn(Math.toRadians(180))
-                .back(25)
+                .back(4)
+                .strafeLeft(25)
+                .forward(10)
                 .build();
+
     }
 
     private void buildBlueZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(0.5)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
+                    right_claw.close();
+                    left_claw.close();
                     sleep(500);
                 })
-                .addTemporalMarker(() -> {
-                    arm.arm_pixel();
-                })
-                .waitSeconds(0.5)
-                .forward(23)
-                .turn(Math.toRadians(-50))
+                .waitSeconds(1)
+                .forward(26)
+                .turn(Math.toRadians(-55))
                 .forward(1)
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);
-                    arm.arm_fold();
-                })
-                .back(2)
-                .turn(Math.toRadians(50))
-                .forward(32.5)
-                .turn(Math.toRadians(90))
-                .forward(72)
-                .strafeLeft(25.5)
-                .forward(16.5)
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
                     arm.arm_backdrop();
+                    sleep(500);
+                })
+                .waitSeconds(1)
+                .turn(Math.toRadians(145))
+                .forward(88.756)
+                .strafeRight(5.25)
+                .addTemporalMarker(() -> {
                     slider.auton();
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
+                    sleep(500);
                     left_claw.open();
-                })
-                .waitSeconds(0.5)
-                .back(15)
-                .strafeRight(17)
-                .turn(Math.toRadians(180))
-                .back(23)
-                .addTemporalMarker(() -> {
+                    sleep(1000);
                     arm.arm_fold();
+                    sleep(500);
                 })
+                .back(4)
+                .strafeLeft(31)
+                .forward(10)
                 .build();
     }
 

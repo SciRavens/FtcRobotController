@@ -36,6 +36,7 @@ public class CloseRedAutonomous extends LinearOpMode {
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot, "red");
         leds = new Leds(robot);
+        arm.arm_fold();
 
         buildRedZone1Trajectory();
         buildRedZone2Trajectory();
@@ -54,6 +55,11 @@ public class CloseRedAutonomous extends LinearOpMode {
         if(isStopRequested()) {
             return;
         }
+        right_claw.close();
+        left_claw.close();
+        arm.arm_pixel();
+        sleep(500);
+
         zone = tge.getZone();
         telemetry.addData("Zone number:", zone);
         telemetry.update();
@@ -80,12 +86,6 @@ public class CloseRedAutonomous extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajRedZone3 = drive.trajectorySequenceBuilder(startPose)
-                .addTemporalMarker(() -> {
-                    right_claw.close();
-                    left_claw.close();
-                    sleep(500);
-                    // sleep(5000);
-                })
                 .waitSeconds(1)
                 .strafeRight(12.5)
                 .forward(22.5)
@@ -108,8 +108,9 @@ public class CloseRedAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .back(4)
-                .strafeRight(19)
-                .forward(10)
+                .strafeRight(24)
+                .turn(Math.toRadians(180))
+                .back(10)
                 .build();
     }
 
@@ -118,25 +119,18 @@ public class CloseRedAutonomous extends LinearOpMode {
         drive.setPoseEstimate(startPose);
         trajRedZone2 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
-                .addTemporalMarker(() -> {
-                    right_claw.close();
-                    left_claw.close();
-                    sleep(500);
-                })
-                .waitSeconds(1)
                 .forward(28)
                 .addTemporalMarker(() -> {
                     left_claw.open();
                     sleep(500);
                     arm.arm_backdrop();
                     sleep(500);
-                    left_claw.close();
-                    sleep(500);
                 })
                 .waitSeconds(1)
+                .forward(1.05)
                 .turn(Math.toRadians(-90))
                 .waitSeconds(1)
-                .forward(39.5)
+                .forward(41)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -146,8 +140,9 @@ public class CloseRedAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .back(4)
-                .strafeRight(23)
-                .forward(10)
+                .strafeRight(28)
+                .turn(Math.toRadians(180))
+                .back(7)
                 .build();
     }
 
@@ -155,13 +150,6 @@ public class CloseRedAutonomous extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajRedZone1 = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(1)
-                .addTemporalMarker(() -> {
-                    right_claw.close();
-                    left_claw.close();
-                    sleep(500);
-                })
-                .waitSeconds(1)
                 .forward(25)
                 .turn(Math.toRadians(55))
                 .forward(0.89878)
@@ -176,7 +164,7 @@ public class CloseRedAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(-145))
                 .forward(22.5)
                 .strafeLeft(10)
-                .forward(18)
+                .forward(19)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
@@ -187,7 +175,8 @@ public class CloseRedAutonomous extends LinearOpMode {
                 })
                 .back(4)
                 .strafeRight(32)
-                .forward(10)
+                .turn(Math.toRadians(180))
+                .back(10)
                 .build();
     }
 
