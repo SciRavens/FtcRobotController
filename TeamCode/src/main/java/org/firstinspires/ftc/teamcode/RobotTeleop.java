@@ -27,6 +27,7 @@ private int cur = 1;
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
         leds = new Leds(robot);
+        leds.setPattern(0);
 
         waitForStart();
         leds.setPattern(cur);
@@ -55,7 +56,7 @@ private int cur = 1;
         if (gamepad2.right_bumper || gamepad1.right_bumper) {
             cur = (cur + 1) % leds.patterns.length;
             leds.setPattern(cur);
-            telemetry.addData("SETTING COLR", leds.patterns[cur].toString());
+            telemetry.addData("SETTING COLOR", leds.patterns[cur].toString());
             telemetry.update();
         }
     }

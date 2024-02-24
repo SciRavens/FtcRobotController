@@ -34,14 +34,23 @@ public class CloseBlueAutonomous extends LinearOpMode {
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot, "blue");
         leds = new Leds(robot);
+        leds.setPattern(0); // Set LED colors to Blue
         arm.arm_fold();
 
+        // Fold and open the claws for placing the pixels
+        arm.arm_fold();
+        right_claw.open();
+        left_claw.open();
+
+        // Build the Trajectories in the Init mode so that we save time
+        // during the run time.
         buildBlueZone1Trajectory();
         buildBlueZone2Trajectory();
         buildBlueZone3Trajectory();
 
+        // Detect the Zone while we are in the init mode
         while(tge.getZone() == -1) {
-            telemetry.addData("CAMERA INIT:", zone);
+            telemetry.addData("CAMERA INIT:", tge.getZone());
             telemetry.update();
             sleep(100);
         }
@@ -50,104 +59,129 @@ public class CloseBlueAutonomous extends LinearOpMode {
         telemetry.update();
 
 
+        // Wait for Start Button to be pressed
         waitForStart();
         if(isStopRequested()) {
             return;
         }
+
+        // Start the auton code
+        // Close both claws first
         left_claw.close();
         right_claw.close();
+        sleep(500);
+
+        // Bring the arm to the floor to push the pixels the zones
         arm.arm_pixel();
 
+        // Get the zone 5 times to avoid any random zone values
         for (int i = 0; i < 5; i++) {
             zone = tge.getZone();
             telemetry.addData("Zone number:", zone);
             telemetry.update();
             sleep(100);
         }
-        leds.setPattern(0);
 
 
         if(opModeIsActive()) {
             //zone = 3;
             switch(zone) {
                 case 1:
+                    // Start the zone1 auton code
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
                     break;
                 case 2:
+                    // Start the zone2 auton code
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone2);;
                     break;
                 case 3:
+                    // Start the zone3 auton code
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone3);;
                     break;
             }
         }
-
+        slider.fold(); // bring the slider down
+        right_claw.close();
+        left_claw.close();
+        leds.setPattern(10);
     }
 
+    // Build Zone1 Trajectory
     private void buildBlueZone1Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
                 .strafeLeft(13.25)
-                .forward(20)
+                .forward(20)    // Go to the zone1
                 .addTemporalMarker(() -> {
+                    // Leave the purple pixel at zone1
                     right_claw.open();
                     sleep(500);
+                    // raise the arm to backrop position to drop pixel later
                     arm.arm_backdrop();
                     sleep(500);
                 })
                 .waitSeconds(1)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
-                .forward(29.25)
+                .forward(29.25) // Now at the Backdrop
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
+                    // Raise the sliders to close to the backdrop
                     slider.auton();
-                    sleep(500);
+                    sleep(1000); // given enough time to safely drop it
+                    // Open the claw to drop the yellow pixel
                     left_claw.open();
-                    sleep(1000);
-                    arm.arm_fold();
+                    sleep(500);
+                    arm.arm_fold();    // Fold the arm away from the backdrop
                     sleep(500);
                 })
                 .back(4)
+                .waitSeconds(0.5)
                 .strafeLeft(17.25)
                 .turn(Math.toRadians(180))
                 .back(10)
                 .build();
     }
 
+    // Build Zone2 Trajectory
     private void buildBlueZone2Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(1)
-                .forward(27)
+                .forward(27) // Go to the zone2
                 .addTemporalMarker(() -> {
+                    // Open the right claw to leave the purple pixel
                     right_claw.open();
                     sleep(500);
-                    arm.arm_backdrop();
+                    arm.arm_backdrop(); // raise the arm to leave the pixel
                     sleep(500);
                 })
                 .waitSeconds(1)
                 .back(1.25)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
-                .forward(41.25)
+                .forward(41.25) // Now at the backdrop
+                .waitSeconds(1)
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(500);
-                    left_claw.open();
+                    slider.auton();         // slider close to the backdrop
                     sleep(1000);
-                    arm.arm_fold();
+                    left_claw.open();       // open the claw to drop yello pixel
+                    sleep(500);
+                    arm.arm_fold();     // fold the arm
                     sleep(500);
                 })
-                .back(4)
-                .strafeLeft(22.75)
-                .turn(Math.toRadians(180))
-                .back(7)
+                .back(4)    // back away from the backdrop
+                .waitSeconds(0.5)
+                .strafeLeft(22.75)  // go to the parking spot
+                .turn(Math.toRadians(180))  // turn backwards
+                .back(7)            // park
                 .build();
     }
 
+    // Build Zone3 trajectory
     private void buildBlueZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
@@ -155,8 +189,9 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(26)
                 .turn(Math.toRadians(-55))
-                .forward(1.27)
+                .forward(1.27)      // go to the Zone3
                 .waitSeconds(1)
+                // Drop the pixel and raise the arm to backdrop
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);
@@ -164,22 +199,28 @@ public class CloseBlueAutonomous extends LinearOpMode {
                     sleep(500);
                 })
                 .waitSeconds(1)
+                // Go to the backdrop
                 .turn(Math.toRadians(145))
                 .forward(21.5)
+                .waitSeconds(0.5)
                 .strafeRight(8)
-                .forward(20.5)
+                .forward(20.5)  // now at the backdrop
+                .waitSeconds(1)
+                // drop the pixel on the backdrop
                 .addTemporalMarker(() -> {
                     slider.auton();
-                    sleep(500);
-                    left_claw.open();
                     sleep(1000);
+                    left_claw.open();
+                    sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })
+                // Go to the parking spot
                 .back(4)
+                .waitSeconds(0.5)
                 .strafeLeft(35)
                 .turn(Math.toRadians(180))
-                .back(10)
+                .back(10) // now at the parking
                 .build();
     }
 

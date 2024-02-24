@@ -32,8 +32,9 @@ public class FarBlueAutonomous extends LinearOpMode {
         left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
         leds = new Leds(robot);
+        leds.setPattern(0);
 
-        //arm.arm_backdrop();
+        // Fold and open the claws for placing the pixels
         arm.arm_fold();
         right_claw.open();
         left_claw.open();
@@ -43,8 +44,10 @@ public class FarBlueAutonomous extends LinearOpMode {
         buildBlueZone1Trajectory();
         buildBlueZone2Trajectory();
         buildBlueZone3Trajectory();
+
+        // Get the zone a few times to avoid random values
         while(tge.getZone() == -1) {
-            telemetry.addData("CAMERA INIT:", zone);
+            telemetry.addData("CAMERA INIT:", tge.getZone());
             telemetry.update();
             sleep(100);
         }
@@ -52,94 +55,105 @@ public class FarBlueAutonomous extends LinearOpMode {
         telemetry.addData("INIT Zone number:", zone);
         telemetry.update();
 
+        // Wait for start button to be pressed
         waitForStart();
         if(isStopRequested()) {
             return;
         }
-        right_claw.close();   //init code
+        //Now the Auton Started
+        right_claw.close();
         left_claw.close();
+
         zone = tge.getZone();
         telemetry.addData("Zone number:", zone);
         telemetry.update();
         tge.stop();
-        leds.setPattern(0);
 
         if(opModeIsActive()) {
             //zone = 2;
             switch(zone) {
                 case 1:
+                    // Zone1
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone1);;
                     break;
                 case 2:
+                    // Zone2
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone2);;
                     break;
                 case 3:
+                    // Zone3
                     robot.sampleDrive.followTrajectorySequence(trajBlueZone3);;
                     break;
             }
         }
-
+        slider.fold();
+        right_claw.close();
+        left_claw.close();
+        leds.setPattern(10);
     }
 
+    // Build Zone1 trajectory
     private void buildBlueZone1Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    sleep(500);
-                })
-                .addTemporalMarker(() -> {
                     arm.arm_pixel();
+                    sleep(500);
                 })
                 .waitSeconds(0.5)
                 .forward(22)
                 .turn(Math.toRadians(50))
-                .forward(4)
+                .forward(4)     // Now at the zone1
+                // Drop the purple pixel
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);
-                    arm.arm_fold();  //places purple pixel
+                    arm.arm_backdrop();  //places purple pixel
+                    sleep(500);
                 })
+                // Now go near the gate and turn toward the backdrop
                 .back(3)
                 .turn(Math.toRadians(-50))
                 .forward(30)
                 .turn(Math.toRadians(90))
-                .forward(72) //goes through middle fence
+
+                // Go through middle fence
+                .forward(72)
                 .strafeLeft(37)
                 .forward(15.235)
                 .waitSeconds(0.5)
+                // Drop the yellow pixel
                 .addTemporalMarker(() -> {
-                    arm.arm_backdrop();
                     slider.auton();
-                })
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
+                    sleep(1000);
                     left_claw.open();
                     sleep(500);
                     arm.arm_fold(); //places pixel on the backdrop
                     sleep(500);
                 })
                 .waitSeconds(1)
+                // Go to the parking in the center side
                 .back(15)
                 .strafeRight(32)
                 .turn(Math.toRadians(180))
-                .back(23) //parks in the middle
-                .addTemporalMarker(() -> {
-                    arm.arm_fold();
-                })
+                .back(23) // Now at the parking
                 .build();
 
     }
 
+    // Zone2 trajectory
     private void buildBlueZone2Trajectory() {
         //Pose2d startPose = new Pose2d(-35.5, 64, Math.toRadians(270));
         Pose2d startPose = new Pose2d(0, 0, 0);
         //drive.setPoseEstimate(startPose);
         trajBlueZone2 = drive.trajectorySequenceBuilder(startPose)
+                // Go to the zone2
                 .forward(50.5)
-                .turn(Math.toRadians(185))
+                .turn(Math.toRadians(185))  // Now at the zone2
                 .waitSeconds(0.5)
+                // Drop the purple pixel
                 .addTemporalMarker(() -> {
                     arm.arm_pixel();
                     sleep(500);
@@ -148,13 +162,16 @@ public class FarBlueAutonomous extends LinearOpMode {
                     arm.arm_backdrop(); //places purple pixel
                     sleep(500);
                 })
+                // Position near the gate
                 .back(6.5)
-                .turn(Math.toRadians(-93))
+                .turn(Math.toRadians(-93)) // face the backdrop
                 .waitSeconds(0.5)
-                .forward(70) //goes through the middle fence
-                .strafeLeft(30.65) // 28.55 old
+
+                // Go to the backdrop through the gate
+                .forward(70)
+                .strafeLeft(30.65)
                 .waitSeconds(0.5)
-                .forward(19) //goes towards back drop
+                .forward(19) //now at the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
@@ -165,60 +182,66 @@ public class FarBlueAutonomous extends LinearOpMode {
                     arm.arm_fold(); //places pixel on the back drop
                     sleep(500);
                 })
+                // Go to the parking at the center
                 .back(10)
                 .waitSeconds(0.5)
                 .strafeRight(21.5)
                 .waitSeconds(0.5)
                 .turn(Math.toRadians(180))
                 .waitSeconds(0.5)
-                .back(15) //parks
+                .back(15) //now parked
                 .build();
     }
 
+    // Zone3 trajectory
     private void buildBlueZone3Trajectory() {
         Pose2d startPose = new Pose2d(0, 0, 0);
         drive.setPoseEstimate(startPose);
         trajBlueZone3 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    sleep(500);
-                })
+                // Drop the arm
                 .addTemporalMarker(() -> {
                     arm.arm_pixel();
+                    sleep(500);
                 })
                 .waitSeconds(0.5)
                 .forward(23)
                 .turn(Math.toRadians(-50))
-                .forward(1)
+                .forward(1) // Now at the zone3
+                // Drop the purple pixel
                 .addTemporalMarker(() -> {
                     right_claw.open();
                     sleep(500);
-                    arm.arm_fold(); //places pixel
+                    arm.arm_backdrop();
+                    sleep(500);
                 })
                 .back(2)
                 .turn(Math.toRadians(50))
                 .forward(32.5)
-                .turn(Math.toRadians(90))
-                .forward(72)  //goes through the middle fence
+                .turn(Math.toRadians(90)) // Face the backdrop now
+
+                // Go through the gate
+                .forward(72)
                 .strafeLeft(25.5)
                 .forward(14.56)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    arm.arm_backdrop();
                     slider.auton();
+                    sleep(500);
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     left_claw.open(); //places pixel on the backdrop
+                    sleep(500);
+                    arm.arm_fold();
+                    sleep(500);
                 })
                 .waitSeconds(0.5)
+                // Go to the parking
                 .back(15)
                 .strafeRight(17)
                 .turn(Math.toRadians(180))
-                .back(23) //parks
-                .addTemporalMarker(() -> {
-                    arm.arm_fold();
-                })
+                .back(23) // Parked at the center
                 .build();
     }
 

@@ -27,6 +27,10 @@ public class Slider extends EncoderMotorOps {
         autoOp(pos_auton);
     }
 
+    public void fold() {
+        autoOp(pos_min);
+    }
+
     public void operate() {
         autoOpCompletionCheck();
         if (gamepad.dpad_down) {
