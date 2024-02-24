@@ -40,6 +40,9 @@ public class CloseRedAutonomous extends LinearOpMode {
 
         // Fold and open the claws for placing the pixels
         arm.arm_fold();
+        right_claw.close();
+        left_claw.close();
+        sleep(500);
         right_claw.open();
         left_claw.open();
 
@@ -90,6 +93,7 @@ public class CloseRedAutonomous extends LinearOpMode {
         right_claw.close();
         left_claw.close();
         leds.setPattern(10);
+        sleep(1000);
     }
 
     // Build Zone1 trajectory
@@ -114,14 +118,17 @@ public class CloseRedAutonomous extends LinearOpMode {
                 .forward(22.5)
                 .waitSeconds(0.5)
                 .strafeLeft(10)
-                .forward(19) // now at the backdrop
-
-                // Drop the yellow pixel on the backdrop
+                // raise the slider
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(500);
+                })
+                .waitSeconds(0.5)
+                .forward(19) // now at the backdrop
+                // Drop the yellow pixel on the backdrop
+                .addTemporalMarker(() -> {
                     right_claw.open();
-                    sleep(1000);
+                    sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })
@@ -153,14 +160,17 @@ public class CloseRedAutonomous extends LinearOpMode {
                 .forward(1.05)
                 .turn(Math.toRadians(-90))
                 .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(500);
+                })
+                .waitSeconds(0.5)
                 .forward(41)    // Now at the backdrop
 
                 // Drop the yellow pixel on the backdrop
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(500);
                     right_claw.open();
-                    sleep(1000);
+                    sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })
@@ -195,14 +205,17 @@ public class CloseRedAutonomous extends LinearOpMode {
                 //Go to the backdrop
                 .turn(Math.toRadians(-90))
                 .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(500);
+                })
+                .waitSeconds(0.5)
                 .forward(29.77) // now at the backdrop
 
                 // Drop the yellow pixel on the backdrop
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(500);
                     right_claw.open();
-                    sleep(1000);
+                    sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })

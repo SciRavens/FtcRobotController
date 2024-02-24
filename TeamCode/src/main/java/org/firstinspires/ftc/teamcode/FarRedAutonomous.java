@@ -36,6 +36,9 @@ public class FarRedAutonomous extends LinearOpMode {
 
         //arm.arm_backdrop(); //before init program:
         arm.arm_fold();
+        right_claw.close();
+        left_claw.close();
+        sleep(500);
         right_claw.open();
         left_claw.open();
 
@@ -86,6 +89,7 @@ public class FarRedAutonomous extends LinearOpMode {
         right_claw.close();
         left_claw.close();
         leds.setPattern(10);
+        sleep(1000);
     }
 
 
@@ -120,12 +124,16 @@ public class FarRedAutonomous extends LinearOpMode {
                 // Go through the gate
                 .forward(72)
                 .waitSeconds(0.5)
-                .strafeRight(19)
-                .forward(16)
+                .strafeRight(20.2 )
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
+                })
+                .waitSeconds(1)
+                .forward(15) // go to the backdrop
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
                     right_claw.open(); //places pixel on the backdrop
                     sleep(500);
                     arm.arm_fold();
@@ -170,14 +178,16 @@ public class FarRedAutonomous extends LinearOpMode {
                 .forward(70)
                 .waitSeconds(0.5)
                 .strafeRight(26)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(1000);
+                })
                 .waitSeconds(0.5)
-                .forward(17.9) // go to the backdrop
+                .forward(17.65) // go to the backdrop
                 .waitSeconds(0.5)
 
                 // drop the yellow pixel on the backdrop
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(1000);
                     right_claw.open(); //places pixel on the back drop
                     sleep(500);
                     arm.arm_fold();
@@ -229,11 +239,14 @@ public class FarRedAutonomous extends LinearOpMode {
                 .forward(72)
                 .waitSeconds(0.5)
                 .strafeRight(31.5)
-                .forward(15)
-                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
+                })
+                .waitSeconds(0.5)
+                .forward(14)
+                .waitSeconds(0.5)
+                .addTemporalMarker(() -> {
                     right_claw.open(); //places yellow pixel on the back drop
                     sleep(1000);
                     arm.arm_fold();

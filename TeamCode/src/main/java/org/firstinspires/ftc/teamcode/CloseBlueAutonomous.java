@@ -39,6 +39,9 @@ public class CloseBlueAutonomous extends LinearOpMode {
 
         // Fold and open the claws for placing the pixels
         arm.arm_fold();
+        right_claw.close();
+        left_claw.close();
+        sleep(500);
         right_claw.open();
         left_claw.open();
 
@@ -104,6 +107,7 @@ public class CloseBlueAutonomous extends LinearOpMode {
         right_claw.close();
         left_claw.close();
         leds.setPattern(10);
+        sleep(1000);
     }
 
     // Build Zone1 Trajectory
@@ -125,23 +129,29 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 .waitSeconds(1)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
-                .forward(29.25) // Now at the Backdrop
-                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     // Raise the sliders to close to the backdrop
                     slider.auton();
-                    sleep(1000); // given enough time to safely drop it
+                    sleep(1000); // given enough time
+                })
+                .waitSeconds(0.5)
+                .forward(29.25) // Now at the Backdrop
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
                     // Open the claw to drop the yellow pixel
                     left_claw.open();
                     sleep(500);
                     arm.arm_fold();    // Fold the arm away from the backdrop
                     sleep(500);
                 })
-                .back(4)
-                .waitSeconds(0.5)
-                .strafeLeft(17.25)
-                .turn(Math.toRadians(180))
+                // Now start parking
                 .back(10)
+                .waitSeconds(0.5)
+                .turn(Math.toRadians(180))
+                .waitSeconds(0.5)
+                .strafeRight(20)
+                .waitSeconds(0.5)
+                .back(16) // Parked
                 .build();
     }
 
@@ -163,21 +173,26 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 .back(1.25)
                 .turn(Math.toRadians(90))
                 .waitSeconds(1)
-                .forward(41.25) // Now at the backdrop
-                .waitSeconds(1)
                 .addTemporalMarker(() -> {
                     slider.auton();         // slider close to the backdrop
                     sleep(1000);
+                })
+                .waitSeconds(0.5)
+                .forward(41.25) // Now at the backdrop
+                .waitSeconds(1)
+                .addTemporalMarker(() -> {
                     left_claw.open();       // open the claw to drop yello pixel
                     sleep(500);
                     arm.arm_fold();     // fold the arm
                     sleep(500);
                 })
-                .back(4)    // back away from the backdrop
+                .back(10)    // back away from the backdrop
                 .waitSeconds(0.5)
-                .strafeLeft(22.75)  // go to the parking spot
                 .turn(Math.toRadians(180))  // turn backwards
-                .back(7)            // park
+                .waitSeconds(0.5)
+                .strafeRight(25)  // go to the parking spot
+                .waitSeconds(0.5)
+                .back(16)            // park
                 .build();
     }
 
@@ -204,23 +219,28 @@ public class CloseBlueAutonomous extends LinearOpMode {
                 .forward(21.5)
                 .waitSeconds(0.5)
                 .strafeRight(8)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(1000);
+                })
+                .waitSeconds(0.5)
                 .forward(20.5)  // now at the backdrop
                 .waitSeconds(1)
                 // drop the pixel on the backdrop
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(1000);
                     left_claw.open();
                     sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })
                 // Go to the parking spot
-                .back(4)
+                .back(10)
                 .waitSeconds(0.5)
-                .strafeLeft(35)
                 .turn(Math.toRadians(180))
-                .back(10) // now at the parking
+                .waitSeconds(0.5)
+                .strafeRight(37)
+                .waitSeconds(0.5)
+                .back(16) // now at the parking
                 .build();
     }
 
