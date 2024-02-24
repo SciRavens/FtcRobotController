@@ -36,8 +36,12 @@ public class FarBlueAutonomous extends LinearOpMode {
 
         // Fold and open the claws for placing the pixels
         arm.arm_fold();
+        right_claw.close();
+        left_claw.close();
+        sleep(500);
         right_claw.open();
         left_claw.open();
+        sleep(500);
 
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot, "blue");
@@ -90,6 +94,7 @@ public class FarBlueAutonomous extends LinearOpMode {
         right_claw.close();
         left_claw.close();
         leds.setPattern(10);
+        sleep(1000);
     }
 
     // Build Zone1 trajectory
@@ -122,12 +127,15 @@ public class FarBlueAutonomous extends LinearOpMode {
                 // Go through middle fence
                 .forward(72)
                 .strafeLeft(37)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(1000);
+                })
+                .waitSeconds(0.5)
                 .forward(15.235)
                 .waitSeconds(0.5)
                 // Drop the yellow pixel
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(1000);
                     left_claw.open();
                     sleep(500);
                     arm.arm_fold(); //places pixel on the backdrop
@@ -170,12 +178,14 @@ public class FarBlueAutonomous extends LinearOpMode {
                 // Go to the backdrop through the gate
                 .forward(70)
                 .strafeLeft(30.65)
+                .addTemporalMarker(() -> {
+                    slider.auton();
+                    sleep(1000);
+                })
                 .waitSeconds(0.5)
                 .forward(19) //now at the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    slider.auton();
-                    sleep(1000);
                     right_claw.open();
                     left_claw.open();
                     sleep(500);
@@ -219,16 +229,17 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(50))
                 .forward(32.5)
                 .turn(Math.toRadians(90)) // Face the backdrop now
+                .waitSeconds(0.5)
 
                 // Go through the gate
                 .forward(72)
                 .strafeLeft(25.5)
-                .forward(14.56)
-                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
-                    sleep(500);
+                    sleep(1000);
                 })
+                .waitSeconds(0.5)
+                .forward(14.56)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     left_claw.open(); //places pixel on the backdrop

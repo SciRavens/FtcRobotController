@@ -11,7 +11,9 @@ public class Slider extends EncoderMotorOps {
     static final private int pos_max = 7800;
     static final private int pos_min = 0;
     private int pos_middle = 3900;
-    private int pos_auton = 1000;
+   //private int pos_auton = 1000;
+
+    private int pos_auton = 1500;
     private boolean verbose = false;
     private int motor_ticks = 1425;
 

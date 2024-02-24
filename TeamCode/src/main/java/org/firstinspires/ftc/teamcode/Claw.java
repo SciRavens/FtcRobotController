@@ -5,13 +5,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
     Servo servo;
-    private boolean closed = false;
+    private boolean closed = true;
     double pos_close, pos_open;
     public Claw(Servo servo, double close, double open) {
         this.servo = servo;
         this.pos_close = close;
         this.pos_open = open;
-        servo.setPosition(pos_open);
+        servo.setPosition(pos_close);
     }
 
     public void open()
