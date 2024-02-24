@@ -33,7 +33,7 @@ public class FarRedAutonomous extends LinearOpMode {
         right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
         leds = new Leds(robot);
 
-        //arm.arm_backdrop();
+        //arm.arm_backdrop(); //before init program:
         arm.arm_fold();
         right_claw.open();
         left_claw.open();
@@ -56,7 +56,7 @@ public class FarRedAutonomous extends LinearOpMode {
         if(isStopRequested()) {
             return;
         }
-        right_claw.close();
+        right_claw.close();  //init programs
         left_claw.close();
         zone = tge.getZone();
         telemetry.addData("Zone number:", zone);
@@ -97,7 +97,7 @@ public class FarRedAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(-50))
                 .forward(4)
                 .addTemporalMarker(() -> {
-                    left_claw.open();
+                    left_claw.open(); //places purple pixel
                     sleep(500);
                     arm.arm_fold();
                 })
@@ -105,9 +105,9 @@ public class FarRedAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(50))
                 .forward(30)
                 .turn(Math.toRadians(-90))
-                .forward(72)
-                .strafeRight(30)//p
-                .forward(16.15)
+                .forward(72) //goes through middle fence
+                .strafeRight(31.5)
+                .forward(15)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     arm.arm_backdrop();
@@ -115,13 +115,13 @@ public class FarRedAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    right_claw.open(); //places yellow pixel on the back drop
+                     sleep(1000);
                 })
-                .waitSeconds(0.5)
                 .back(15)
                 .strafeLeft(29.5)
                 .turn(Math.toRadians(-180))
-                .back(20)
+                .back(20) //parks
                 .build();
 
 
@@ -147,74 +147,25 @@ public class FarRedAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(93))
                 .waitSeconds(0.5)
                 .forward(70)
-                .strafeRight(25)
+                .strafeRight(26)
                 .waitSeconds(0.5)
-                .forward(17.5) // go to the backdrop
+                .forward(17.9) // go to the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
-                    right_claw.open();
+                    right_claw.open(); //places pixel on the back drop
                     sleep(500);
                     arm.arm_fold();
                     sleep(500);
                 })
                 .back(10)
                 .waitSeconds(1)
-                .strafeLeft(22)
+                .strafeLeft(23)
                 .waitSeconds(1)
-                .turn(Math.toRadians(-180)) // 3.14159265359
+                .turn(Math.toRadians(-180))
                 .waitSeconds(0.5)
-                .back(15)
-                .build();
-    }
-
-    private void buildBlueZone2longTrajectory() {
-        //Pose2d startPose = new Pose2d(-35.5, 64, Math.toRadians(270));
-        Pose2d startPose = new Pose2d(0, 0, 0);
-        //drive.setPoseEstimate(startPose);
-        trajZone2 = drive.trajectorySequenceBuilder(startPose)
-                .forward(49.007)
-                .turn(Math.toRadians(185))
-                //.back(3)
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> { // drops purple pixel
-                    arm.arm_pixel();
-                    sleep(500);
-                    right_claw.open();
-                    sleep(500);
-                    arm.arm_backdrop();
-                    sleep(500);
-                })
-
-                .addTemporalMarker(() -> {
-                    right_claw.close();
-                    sleep(1000);
-                    arm.arm_backdrop();
-                    sleep(500);
-                })
-                .waitSeconds(10)
-                .turn(Math.toRadians(180))
-                .waitSeconds(0.5)
-                .forward(92)
-                .strafeLeft(41)
-                .waitSeconds(0.5)
-                .forward(5)
-                .waitSeconds(0.5)
-                .addTemporalMarker(() -> {
-                    right_claw.open();
-                    left_claw.open();
-                    sleep(500);
-                    left_claw.close();
-                    right_claw.close();
-                    sleep(500);
-                    arm.arm_fold();
-                    sleep(500);
-                })
-                .back(12)
-                .strafeRight(26)
-                .turn(Math.toRadians(180))
-                .back(25)
+                .back(15) //parks
                 .build();
     }
 
@@ -234,7 +185,7 @@ public class FarRedAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(50))
                 .forward(1)
                 .addTemporalMarker(() -> {
-                    left_claw.open();
+                    left_claw.open(); //places purple pixel
                     sleep(500);
                     arm.arm_fold();
                 })
@@ -242,8 +193,8 @@ public class FarRedAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(-50))
                 .forward(32.5)
                 .turn(Math.toRadians(-90))
-                .forward(72)
-                .strafeRight(18.3)
+                .forward(72) //goes through the middle fence
+                .strafeRight(19)
                 .forward(16)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
@@ -252,13 +203,14 @@ public class FarRedAutonomous extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    right_claw.open(); //places pixel on the backdrop
+                    arm.arm_fold();
                 })
                 .waitSeconds(0.5)
                 .back(15)
                 .strafeLeft(16)
                 .turn(Math.toRadians(-180))
-                .back(19)
+                .back(19) //parks
                 .build();
     }
 
