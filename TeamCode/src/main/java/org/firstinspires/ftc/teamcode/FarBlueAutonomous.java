@@ -183,7 +183,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                     sleep(1000);
                 })
                 .waitSeconds(0.5)
-                .forward(19) //now at the backdrop
+                .forward(17.5) //now at the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     right_claw.open();

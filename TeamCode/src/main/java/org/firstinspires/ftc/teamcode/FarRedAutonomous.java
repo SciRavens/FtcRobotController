@@ -124,14 +124,14 @@ public class FarRedAutonomous extends LinearOpMode {
                 // Go through the gate
                 .forward(72)
                 .waitSeconds(0.5)
-                .strafeRight(20.2 )
+                .strafeRight(19.75 )
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
                 })
                 .waitSeconds(1)
-                .forward(15) // go to the backdrop
+                .forward(14) // go to the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     right_claw.open(); //places pixel on the backdrop
@@ -177,7 +177,7 @@ public class FarRedAutonomous extends LinearOpMode {
                 // go through the gate
                 .forward(70)
                 .waitSeconds(0.5)
-                .strafeRight(26)
+                .strafeRight(25.45)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
@@ -238,7 +238,7 @@ public class FarRedAutonomous extends LinearOpMode {
                 // Go through the gate
                 .forward(72)
                 .waitSeconds(0.5)
-                .strafeRight(31.5)
+                .strafeRight(30.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
