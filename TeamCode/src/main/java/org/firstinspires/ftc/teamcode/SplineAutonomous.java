@@ -15,7 +15,7 @@ public class SplineAutonomous extends LinearOpMode {
     public SampleMecanumDrive drive;
     public Slider slider;
     public Arm arm;
-    public Claw left_claw, right_claw;
+    public Claw claw;
     public AprilTag tag;
     public TgeDetection tge;
     String curAlliance = "red";
@@ -29,12 +29,9 @@ public class SplineAutonomous extends LinearOpMode {
         drive = robot.sampleDrive;
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
-
-        left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
-
-        right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
+        claw = new Claw(robot.servoCR, robot.claw_left_close,robot.claw_left_wide_close, robot.claw_left_open, robot.servoCL, robot.claw_right_close,  robot.claw_right_wide_close, robot.claw_right_open);
         leds = new Leds(robot);
-        arm.arm_fold();
+        arm.setPosFold();
 
         //tag = new AprilTag(robot);
         tge = new TgeDetection(robot, "red");
@@ -67,8 +64,7 @@ public class SplineAutonomous extends LinearOpMode {
                 //.setAccelConstraint( SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 //.setTurnConstraint(18, 20)
                 .addTemporalMarker(() -> {
-                    right_claw.close();
-                    left_claw.close();
+                    claw.close();
                     sleep(500);
                 })
                 .waitSeconds(0.5)
@@ -77,13 +73,13 @@ public class SplineAutonomous extends LinearOpMode {
                 .turn(Math.toRadians(180))
                 .forward(1)
                 .addTemporalMarker(() -> {
-                    arm.arm_pixel();
+                    arm.setPosSample();
                     sleep(500);
-                    right_claw.open();
+                    claw.open();
                     sleep(500);
-                    arm.arm_backdrop();
+                    arm.setPosSpecimen();
                     sleep(500);
-                    right_claw.close();
+                    claw.close();
                     sleep(500);
                 })
                 .back(1)
@@ -96,8 +92,8 @@ public class SplineAutonomous extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
-                    left_claw.open();
-                    arm.arm_fold();
+                    claw.open();
+                    arm.setPosFold();
                 })
 
                 .back(3)

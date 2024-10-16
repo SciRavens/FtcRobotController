@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -25,6 +26,8 @@ public class Robot {
 
     public DcMotorEx motorSlider; // Slider
     public Servo servoArm; // Elbow or Arm
+    //public CRServo servoArm; // Elbow or Arm
+    public Servo servoWrist; // Wrist
 
     public Servo servoCR; // Claw Right
     public Servo servoCL; // Claw left
@@ -35,10 +38,12 @@ public class Robot {
     private AprilTagProcessor aprilTag;
     public WebcamName webcam;
     public SampleMecanumDrive sampleDrive;
-    public double claw_left_open = 1;
-    public double claw_right_open = 0.0;
-    public double claw_left_close = 0.75;
-    public double claw_right_close = 0.3;
+    public double claw_left_open = 0.8;
+    public double claw_right_open = 0.4;
+    public double claw_left_close = 0.4;
+    public double claw_right_close = 1.0;
+    public double claw_left_wide_close = 0.6;
+    public double claw_right_wide_close = 0.8;
     public RevBlinkinLedDriver led;
 
 
@@ -49,7 +54,9 @@ public class Robot {
         motorBL = hardwareMap.get(DcMotor.class, "back_left");
         motorBR = hardwareMap.get(DcMotor.class, "back_right");
         motorSlider = hardwareMap.get(DcMotorEx.class, "sliders");
+        //servoArm = hardwareMap.get(Servo.class, "arm");
         servoArm = hardwareMap.get(Servo.class, "arm");
+        servoWrist = hardwareMap.get(Servo.class, "claw_arm");
         servoCL = hardwareMap.get(Servo.class, "claw_left");
         servoCR = hardwareMap.get(Servo.class, "claw_right");
         servoDrone = hardwareMap.get(Servo.class, "drone");

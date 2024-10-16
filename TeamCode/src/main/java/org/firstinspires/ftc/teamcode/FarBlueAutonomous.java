@@ -13,7 +13,7 @@ public class FarBlueAutonomous extends LinearOpMode {
     public SampleMecanumDrive drive;
     public Slider slider;
     public Arm arm;
-    public Claw left_claw, right_claw;
+    public Claw claw;
     public AprilTag tag;
     public TgeDetection tge;
     String curAlliance = "red";
@@ -29,18 +29,15 @@ public class FarBlueAutonomous extends LinearOpMode {
         drive = robot.sampleDrive;
         slider = new Slider(robot, gamepad2);
         arm = new Arm(robot, gamepad2);
-        left_claw = new Claw(robot.servoCR, robot.claw_left_close, robot.claw_left_open);
-        right_claw = new Claw(robot.servoCL, robot.claw_right_close, robot.claw_right_open);
+        claw = new Claw(robot.servoCR, robot.claw_left_close,robot.claw_left_wide_close, robot.claw_left_open, robot.servoCL, robot.claw_right_close,  robot.claw_right_wide_close, robot.claw_right_open);
         leds = new Leds(robot);
         leds.setPattern(0);
 
         // Fold and open the claws for placing the pixels
-        arm.arm_fold();
-        right_claw.close();
-        left_claw.close();
+        arm.setPosFold();
+        claw.close();
         sleep(500);
-        right_claw.open();
-        left_claw.open();
+        claw.open();
         sleep(500);
 
         //tag = new AprilTag(robot);
@@ -65,14 +62,13 @@ public class FarBlueAutonomous extends LinearOpMode {
             return;
         }
         //Now the Auton Started
-        right_claw.close();
-        left_claw.close();
+        claw.close();
 
         zone = tge.getZone();
         telemetry.addData("Zone number:", zone);
         telemetry.update();
         tge.stop();
-
+        sleep(4000);
         if(opModeIsActive()) {
             //zone = 2;
             switch(zone) {
@@ -91,8 +87,8 @@ public class FarBlueAutonomous extends LinearOpMode {
             }
         }
         slider.fold();
-        right_claw.close();
-        left_claw.close();
+        claw.close();
+        claw.close();
         leds.setPattern(10);
         sleep(1000);
     }
@@ -104,7 +100,7 @@ public class FarBlueAutonomous extends LinearOpMode {
         trajBlueZone1 = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    arm.arm_pixel();
+                    arm.setPosSample();
                     sleep(500);
                 })
                 .waitSeconds(0.5)
@@ -113,9 +109,9 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .forward(4)     // Now at the zone1
                 // Drop the purple pixel
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    claw.open();
                     sleep(500);
-                    arm.arm_backdrop();  //places purple pixel
+                    arm.setPosSpecimen();  //places purple pixel
                     sleep(500);
                 })
                 // Now go near the gate and turn toward the backdrop
@@ -126,19 +122,19 @@ public class FarBlueAutonomous extends LinearOpMode {
 
                 // Go through middle fence
                 .forward(72)
-                .strafeLeft(37)
+                .strafeLeft(35.5)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
                 })
                 .waitSeconds(0.5)
-                .forward(15.235)
+                .forward(14.235)
                 .waitSeconds(0.5)
                 // Drop the yellow pixel
                 .addTemporalMarker(() -> {
-                    left_claw.open();
+                    claw.open();
                     sleep(500);
-                    arm.arm_fold(); //places pixel on the backdrop
+                    arm.setPosFold(); //places pixel on the backdrop
                     sleep(500);
                 })
                 .waitSeconds(1)
@@ -163,11 +159,11 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .waitSeconds(0.5)
                 // Drop the purple pixel
                 .addTemporalMarker(() -> {
-                    arm.arm_pixel();
+                    arm.setPosSample();
                     sleep(500);
-                    right_claw.open();
+                    claw.open();
                     sleep(500);
-                    arm.arm_backdrop(); //places purple pixel
+                    arm.setPosSpecimen(); //places purple pixel
                     sleep(500);
                 })
                 // Position near the gate
@@ -177,19 +173,19 @@ public class FarBlueAutonomous extends LinearOpMode {
 
                 // Go to the backdrop through the gate
                 .forward(70)
-                .strafeLeft(30.65)
+                .strafeLeft(28.8)
                 .addTemporalMarker(() -> {
                     slider.auton();
                     sleep(1000);
                 })
                 .waitSeconds(0.5)
-                .forward(17.5) //now at the backdrop
+                .forward(16.15) //now at the backdrop
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    right_claw.open();
-                    left_claw.open();
+                    claw.open();
+                    claw.open();
                     sleep(500);
-                    arm.arm_fold(); //places pixel on the back drop
+                    arm.setPosFold(); //places pixel on the back drop
                     sleep(500);
                 })
                 // Go to the parking at the center
@@ -211,7 +207,7 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .waitSeconds(0.5)
                 // Drop the arm
                 .addTemporalMarker(() -> {
-                    arm.arm_pixel();
+                    arm.setPosSample();
                     sleep(500);
                 })
                 .waitSeconds(0.5)
@@ -220,9 +216,9 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .forward(1) // Now at the zone3
                 // Drop the purple pixel
                 .addTemporalMarker(() -> {
-                    right_claw.open();
+                    claw.open();
                     sleep(500);
-                    arm.arm_backdrop();
+                    arm.setPosSpecimen();
                     sleep(500);
                 })
                 .back(2)
@@ -242,9 +238,9 @@ public class FarBlueAutonomous extends LinearOpMode {
                 .forward(14.56)
                 .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
-                    left_claw.open(); //places pixel on the backdrop
+                    claw.open(); //places pixel on the backdrop
                     sleep(500);
-                    arm.arm_fold();
+                    arm.setPosFold();
                     sleep(500);
                 })
                 .waitSeconds(0.5)
